@@ -1,0 +1,17 @@
+{
+    "env": {
+        "browser": true,
+        "jest": true,
+        "node": true
+    },
+    "extends": "airbnb",
+    "globals": {
+        "gapi": true
+    },
+    "rules": {
+        "quotes": [2, "double"],
+        "indent": [2, 4],
+        "react/jsx-indent": [2, 4],
+        "react/jsx-indent-props": [2, 4]
+    }
+}
