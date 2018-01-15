@@ -13,7 +13,7 @@ export default class CallStarter extends React.Component {
 
     render() {
         const start = () => this.setState({ started: true });
-        const { user } = this.props;
+        const { parameters, user } = this.props;
         const { started } = this.state;
         if (!started) {
             return (
@@ -23,10 +23,11 @@ export default class CallStarter extends React.Component {
             );
         }
         const stop = () => this.setState({ started: false });
-        return <SpreadsheetContainer user={user} stop={stop} />;
+        return <SpreadsheetContainer parameters={parameters} user={user} stop={stop} />;
     }
 }
 
 CallStarter.propTypes = {
+    parameters: propTypes.appParameters.isRequired,
     user: propTypes.user,
 };

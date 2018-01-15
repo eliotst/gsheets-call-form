@@ -1,8 +1,9 @@
 const CleanWebpackPlugin = require("clean-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const path = require("path");
+const webpack = require("webpack");
 
-module.exports = {
+module.exports = (env = {}) => ({
     devServer: {
         contentBase: path.join(__dirname, "dist"),
         compress: true,
@@ -59,6 +60,9 @@ module.exports = {
         path: path.join(__dirname, "./dist"),
     },
     plugins: [
+        new webpack.DefinePlugin({
+            OAUTH_CLIENT_ID: JSON.stringify(env.OAUTH_CLIENT_ID),
+        }),
         new CleanWebpackPlugin(["dist/*"]),
         new CopyWebpackPlugin([
             { from: "src/static/" },
@@ -67,4 +71,4 @@ module.exports = {
     resolve: {
         extensions: [".js", ".json", ".jsx"],
     },
-};
+});

@@ -25,7 +25,7 @@ export default class UserContainer extends React.Component {
             const { result } = response;
             const { onUserChange } = this.props;
             onUserChange({
-                name: result.names[0].givenName,
+                name: result.names[0].displayName,
             });
             this.setState({ error: null });
         }, (reason) => {
@@ -35,7 +35,7 @@ export default class UserContainer extends React.Component {
 
     render() {
         const { error } = this.state;
-        const { user } = this.props;
+        const { parameters, user } = this.props;
         if (error !== null) {
             return <div>{error}</div>;
         }
@@ -44,7 +44,7 @@ export default class UserContainer extends React.Component {
         }
         return (
             <div>
-                <CallStarter user={user} />
+                <CallStarter parameters={parameters} user={user} />
             </div>
         );
     }
@@ -52,6 +52,7 @@ export default class UserContainer extends React.Component {
 
 UserContainer.propTypes = {
     onUserChange: PropTypes.func.isRequired,
+    parameters: propTypes.appParameters.isRequired,
     user: propTypes.user,
 };
 

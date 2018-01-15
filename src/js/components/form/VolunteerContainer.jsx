@@ -2,8 +2,7 @@ import PropTypes from "prop-types";
 import React from "react";
 
 import Form from "./Form";
-
-const SPREADSHEET_ID = "1-vXFpYd1Re52zIm-Ih0CjojbklUyhdTxS54wrBL83C4";
+import propTypes from "../propTypes";
 
 const fieldRowIndexMap = {
     name: 1,
@@ -45,10 +44,20 @@ const mapVolunteerDataToSpreadsheetRow = (volunteerData) => {
     return row;
 };
 
+function validate(volunteer) {
+    const errors = [];
+    if (volunteer.contactStatus === "") {
+        errors.push("You must provide a Contact Status.");
+    }
+    return errors;
+};
+
 export default class VolunteerContainer extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            error: null,
+            validationErrors: [],
             volunteerData: null,
         };
         this.onFieldChange = this.onFieldChange.bind(this);
@@ -63,12 +72,14 @@ export default class VolunteerContainer extends React.Component {
         const { volunteerData } = this.state;
         volunteerData[name] = value;
         this.setState({
+            validationErrors: [],
             volunteerData,
         });
     }
 
     onSave() {
-        const { volunteerRow } = this.props;
+        const { spreadsheetData, volunteerRow } = this.props;
+        const { spreadsheetId } = spreadsheetData;
         const { volunteerData } = this.state;
         const { stop } = this.props;
         const row = mapVolunteerDataToSpreadsheetRow(volunteerData);
@@ -80,35 +91,54 @@ export default class VolunteerContainer extends React.Component {
                 row.slice(saveStart),
             ],
         };
-        // TODO: handle errors
+        const validationErrors = validate(volunteerData);
+        if (validationErrors.length !== 0) {
+            this.setState({ validationErrors });
+            return;
+        }
         gapi.client.sheets.spreadsheets.values.update({
             range,
             resource,
-            spreadsheetId: SPREADSHEET_ID,
+            spreadsheetId,
             valueInputOption: "USER_ENTERED",
-        }).then((response) => {
-            const { result } = response;
-            console.log(`${result.updatedCells} cells appended.`);
+        }).then(() => {
             stop();
+        }, (reason) => {
+            this.setState({
+                error: reason.result.error.message,
+            });
         });
     }
 
     buildVolunteer() {
         const { spreadsheetData, volunteerRow } = this.props;
-        const volunteerData = mapSpreadsheetRowToVolunteer(volunteerRow, spreadsheetData);
+        const volunteerData = mapSpreadsheetRowToVolunteer(volunteerRow, spreadsheetData.values);
         this.setState({
             volunteerData,
         });
     }
 
     render() {
-        const { volunteerData } = this.state;
-        const { releaseVolunteer } = this.props;
+        const { error, validationErrors, volunteerData } = this.state;
+        const { releaseVolunteer, stop } = this.props;
+        if (error !== null) {
+            return (
+                <div>
+                    <div>
+                        {error}
+                    </div>
+                    <div>
+                        <button className="btn" onClick={stop}>Cancel</button>
+                    </div>
+                </div>
+            );
+        }
         if (volunteerData === null) {
             return <div>Loading ...</div>;
         }
         return (
             <Form
+                errors={validationErrors}
                 onFieldChange={this.onFieldChange}
                 onSave={this.onSave}
                 releaseVolunteer={releaseVolunteer}
@@ -120,7 +150,7 @@ export default class VolunteerContainer extends React.Component {
 
 VolunteerContainer.propTypes = {
     releaseVolunteer: PropTypes.func.isRequired,
-    spreadsheetData: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)).isRequired,
+    spreadsheetData: propTypes.spreadsheetData.isRequired,
     stop: PropTypes.func.isRequired,
     volunteerRow: PropTypes.number.isRequired,
 };

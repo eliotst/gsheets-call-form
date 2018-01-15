@@ -9,6 +9,7 @@ export default function Page({
     isLoggedIn,
     onLoginStateChange,
     onUserChange,
+    parameters,
     user,
 }) {
     return (
@@ -22,6 +23,7 @@ export default function Page({
                     isLoggedIn={isLoggedIn}
                     onLoginStateChange={onLoginStateChange}
                     onUserChange={onUserChange}
+                    parameters={parameters}
                     user={user}
                 />
             </div>
@@ -33,5 +35,6 @@ Page.propTypes = {
     isLoggedIn: PropTypes.bool.isRequired,
     onLoginStateChange: PropTypes.func.isRequired,
     onUserChange: PropTypes.func.isRequired,
+    parameters: propTypes.appParameters.isRequired,
     user: propTypes.user,
 };

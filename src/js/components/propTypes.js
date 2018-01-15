@@ -1,5 +1,14 @@
 import PropTypes from "prop-types";
 
+const appParameters = PropTypes.shape({
+    spreadsheetId: PropTypes.string.isRequired,
+});
+
+const spreadsheetData = PropTypes.shape({
+    spreadsheetId: PropTypes.string.isRequired,
+    values: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)),
+});
+
 const user = PropTypes.shape({
     name: PropTypes.string.isRequired,
 });
@@ -22,6 +31,8 @@ const volunteerData = PropTypes.shape({
 });
 
 export default {
+    appParameters,
+    spreadsheetData,
     user,
     volunteerData,
 };

@@ -24,9 +24,9 @@ export default function FormQuestionGroup({ onFieldChange, volunteerData }) {
             value={volunteerData.notes}
         />,
         <InterestedInVolunteering
-            key="interstedInVolunteering"
+            key="isInterestedInVolunteering"
             onFieldChange={onFieldChange}
-            value={volunteerData.interestedInVolunteering}
+            value={volunteerData.isInterestedInVolunteering}
         />,
         <ExperienceWithLSU
             key="experienceWithLsu"

@@ -4,7 +4,6 @@ import React from "react";
 import propTypes from "../propTypes";
 import VolunteerContainer from "./VolunteerContainer";
 
-const SPREADSHEET_ID = "1-vXFpYd1Re52zIm-Ih0CjojbklUyhdTxS54wrBL83C4";
 const CALL_LOCK_COLUMN = 8;
 const PHONE_NUMBER_COLUMN = 2;
 
@@ -13,7 +12,7 @@ const pickRandom = (arr) => {
     return arr[randomIndex];
 };
 
-const setLock = (rowNumber, lockValue, caller) => {
+const setLock = (spreadsheetId, rowNumber, lockValue, caller) => {
     const range = `I${rowNumber + 1}:K${rowNumber + 1}`;
     const callDate = lockValue === "" ? "" : new Date().toISOString();
     const resource = {
@@ -22,16 +21,16 @@ const setLock = (rowNumber, lockValue, caller) => {
     return gapi.client.sheets.spreadsheets.values.update({
         range,
         resource,
-        spreadsheetId: SPREADSHEET_ID,
+        spreadsheetId,
         valueInputOption: "USER_ENTERED",
     });
 };
 
-const checkLock = (rowNumber) => {
+const checkLock = (spreadsheetId, rowNumber) => {
     const range = `I${rowNumber + 1}`;
     const params = {
         range,
-        spreadsheetId: SPREADSHEET_ID,
+        spreadsheetId,
     };
     return gapi.client.sheets.spreadsheets.values.get(params);
 };
@@ -40,6 +39,7 @@ export default class VolunteerPicker extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            error: null,
             volunteerRow: null,
         };
         this.releaseVolunteer = this.releaseVolunteer.bind(this);
@@ -52,8 +52,9 @@ export default class VolunteerPicker extends React.Component {
     pickVolunteer() {
         const possibleRows = [];
         const { spreadsheetData, stop, user } = this.props;
+        const { spreadsheetId } = spreadsheetData;
         const caller = user.name;
-        spreadsheetData.forEach((row, index) => {
+        spreadsheetData.values.forEach((row, index) => {
             const lockValue = row[CALL_LOCK_COLUMN];
             const phoneNumber = row[PHONE_NUMBER_COLUMN];
             if ((lockValue === undefined || lockValue === "") &&
@@ -61,10 +62,15 @@ export default class VolunteerPicker extends React.Component {
                 possibleRows.push(index);
             }
         });
+        if (possibleRows.length === 0) {
+            return this.setState({
+                error: "There is no one left to call.",
+            });
+        }
         const rowNumber = pickRandom(possibleRows);
         const lockValue = Math.ceil(Math.random() * 1000000);
-        setLock(rowNumber, lockValue.toString(), caller).then(() => {
-            checkLock(rowNumber).then((response) => {
+        return setLock(spreadsheetId, rowNumber, lockValue.toString(), caller).then(() => {
+            checkLock(spreadsheetId, rowNumber).then((response) => {
                 const { result } = response;
                 const { values } = result;
                 if (values[0][0] === lockValue.toString()) {
@@ -74,21 +80,42 @@ export default class VolunteerPicker extends React.Component {
                 } else {
                     stop();
                 }
+            }).catch((reason) => {
+                this.setState({
+                    error: reason.result.error.message,
+                });
             });
         });
     }
 
     releaseVolunteer() {
         const { volunteerRow } = this.state;
-        const { stop } = this.props;
-        setLock(volunteerRow, "", "").then(() => {
+        const { spreadsheetData, stop } = this.props;
+        const { spreadsheetId } = spreadsheetData;
+        setLock(spreadsheetId, volunteerRow, "", "").then(() => {
             stop();
+        }).catch((reason) => {
+            this.setState({
+                error: reason.result.error.message,
+            });
         });
     }
 
     render() {
         const { onResetSpreadsheet, spreadsheetData, stop } = this.props;
-        const { volunteerRow } = this.state;
+        const { error, volunteerRow } = this.state;
+        if (error !== null) {
+            return (
+                <div>
+                    <div>
+                        {error}
+                    </div>
+                    <div>
+                        <button className="btn" onClick={stop}>Cancel</button>
+                    </div>
+                </div>
+            );
+        }
         if (volunteerRow === null) {
             return <div>Loading ...</div>;
         }
@@ -106,7 +133,7 @@ export default class VolunteerPicker extends React.Component {
 
 VolunteerPicker.propTypes = {
     onResetSpreadsheet: PropTypes.func.isRequired,
-    spreadsheetData: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)).isRequired,
+    spreadsheetData: propTypes.spreadsheetData.isRequired,
     stop: PropTypes.func.isRequired,
     user: propTypes.user,
 };

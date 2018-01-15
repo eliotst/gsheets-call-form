@@ -4,7 +4,6 @@ import React from "react";
 import propTypes from "../propTypes";
 import VolunteerPicker from "./VolunteerPicker";
 
-const SPREADSHEET_ID = "1-vXFpYd1Re52zIm-Ih0CjojbklUyhdTxS54wrBL83C4";
 const RANGE = "A1:AA600";
 
 export default class SpreadsheetContainer extends React.Component {
@@ -22,9 +21,11 @@ export default class SpreadsheetContainer extends React.Component {
     }
 
     getSpreadsheetData() {
+        const { parameters } = this.props;
+        const { spreadsheetId } = parameters;
         // Make an API call to the People API, and print the user's given name.
         const params = {
-            spreadsheetId: SPREADSHEET_ID,
+            spreadsheetId,
             range: RANGE,
         };
         gapi.client.sheets.spreadsheets.values.get(params).then((response) => {
@@ -32,9 +33,12 @@ export default class SpreadsheetContainer extends React.Component {
             const { values } = result;
             this.setState({
                 error: null,
-                spreadsheetData: values,
+                spreadsheetData: {
+                    spreadsheetId,
+                    values,
+                },
             });
-        }, (reason) => {
+        }).catch((reason) => {
             this.setState({
                 error: reason.result.error.message,
             });
@@ -62,6 +66,7 @@ export default class SpreadsheetContainer extends React.Component {
 }
 
 SpreadsheetContainer.propTypes = {
+    parameters: propTypes.appParameters.isRequired,
     stop: PropTypes.func.isRequired,
     user: propTypes.user,
 };

@@ -1,5 +1,7 @@
+import PropTypes from "prop-types";
 import React from "react";
 
+import propTypes from "./propTypes";
 import Page from "./Page";
 
 require("../../stylesheets/app.scss");
@@ -25,15 +27,21 @@ export default class App extends React.Component {
 
     render() {
         const { isLoggedIn, user } = this.state;
+        const { parameters } = this.props;
         return (
             <div>
                 <Page
                     isLoggedIn={isLoggedIn}
                     onLoginStateChange={this.onLoginStateChange}
                     onUserChange={this.onUserChange}
+                    parameters={parameters}
                     user={user}
                 />
             </div>
         );
     }
 }
+
+App.propTypes = {
+    parameters: propTypes.appParameters.isRequired,
+};
