@@ -2,17 +2,22 @@ import Materialize from "materialize-css";
 import PropTypes from "prop-types";
 import React from "react";
 
-export default function Notes({ onFieldChange, value }) {
+import propTypes from "../../propTypes";
+
+export default function TextField({ formFieldConfig, onFieldChange, value }) {
     const onChange = (event) => {
-        onFieldChange("notes", event.target.value);
+        onFieldChange(formFieldConfig.name, event.target.value);
         Materialize.updateTextFields();
     };
+    const fieldId = formFieldConfig.displayName.replace(" ", "-");
     return (
         <div className="input-field col s12">
-            <div className="label">Notes</div>
+            <div className="label">
+                {formFieldConfig.displayName}
+            </div>
             <textarea
                 className="materialize-textarea"
-                id="notes-field"
+                id={fieldId}
                 onChange={onChange}
                 value={value}
             />
@@ -20,7 +25,8 @@ export default function Notes({ onFieldChange, value }) {
     );
 }
 
-Notes.propTypes = {
+TextField.propTypes = {
+    formFieldConfig: propTypes.formFieldConfig.isRequired,
     onFieldChange: PropTypes.func.isRequired,
     value: PropTypes.string.isRequired,
 };

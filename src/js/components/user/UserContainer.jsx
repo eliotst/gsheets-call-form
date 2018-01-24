@@ -1,8 +1,8 @@
 import PropTypes from "prop-types";
 import React from "react";
 
-import propTypes from "./propTypes";
-import CallStarter from "./CallStarter";
+import propTypes from "../propTypes";
+import SpreadsheetContainer from "../spreadsheet/SpreadsheetContainer";
 
 export default class UserContainer extends React.Component {
     constructor(props) {
@@ -20,12 +20,16 @@ export default class UserContainer extends React.Component {
         // Make an API call to the People API, and print the user's given name.
         gapi.client.people.people.get({
             resourceName: "people/me",
-            personFields: "names",
+            personFields: "emailAddresses,names",
         }).then((response) => {
             const { result } = response;
             const { onUserChange } = this.props;
+            const emailAddress = result.emailAddresses[0].value;
+            const name = result.names[0].displayName;
             onUserChange({
-                name: result.names[0].displayName,
+                emailAddress,
+                id: `${name} (${emailAddress})`,
+                name,
             });
             this.setState({ error: null });
         }, (reason) => {
@@ -44,7 +48,7 @@ export default class UserContainer extends React.Component {
         }
         return (
             <div>
-                <CallStarter parameters={parameters} user={user} />
+                <SpreadsheetContainer parameters={parameters} user={user} />
             </div>
         );
     }

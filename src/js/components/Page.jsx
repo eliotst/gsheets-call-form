@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import React from "react";
 
-import LoginContainer from "./LoginContainer";
+import LoginContainer from "./user/LoginContainer";
 import Nav from "./Nav";
 import propTypes from "./propTypes";
 

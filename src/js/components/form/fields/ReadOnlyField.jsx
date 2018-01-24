@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-export default function FormField({
+export default function ReadOnlyField({
     displayName,
     value,
 }) {
@@ -13,7 +13,7 @@ export default function FormField({
     );
 }
 
-FormField.propTypes = {
+ReadOnlyField.propTypes = {
     displayName: PropTypes.string.isRequired,
     value: PropTypes.string.isRequired,
 };

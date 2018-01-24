@@ -2,8 +2,6 @@ import React from "react";
 
 import App from "./App";
 
-const DEFAULT_SPREADSHEET_ID = "1-vXFpYd1Re52zIm-Ih0CjojbklUyhdTxS54wrBL83C4";
-
 export default class AppContainer extends React.Component {
     constructor(props) {
         super(props);
@@ -14,9 +12,10 @@ export default class AppContainer extends React.Component {
 
     componentWillMount() {
         const urlParameters = new URLSearchParams(window.location.search.slice(1));
+        const globalConfig = window.callSheet || {};
         this.setState({
             parameters: {
-                spreadsheetId: urlParameters.get("spreadsheetId") || DEFAULT_SPREADSHEET_ID,
+                spreadsheetId: urlParameters.get("spreadsheetId") || globalConfig.spreadsheetId,
             },
         });
     }

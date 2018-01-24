@@ -2,11 +2,12 @@ import PropTypes from "prop-types";
 import React from "react";
 
 import FormHeader from "./FormHeader";
-import FormQuestionGroup from "./FormQuestionGroup";
+import FormFieldGroup from "./FormFieldGroup";
 import propTypes from "../propTypes";
 
 export default function Form({
     errors,
+    formConfig,
     onFieldChange,
     onSave,
     releaseVolunteer,
@@ -15,8 +16,12 @@ export default function Form({
     const errorElements = errors.map(message => <div className="message">{message}</div>);
     return (
         <div>
-            <FormHeader volunteerData={volunteerData} />
-            <FormQuestionGroup onFieldChange={onFieldChange} volunteerData={volunteerData} />
+            <FormHeader formConfig={formConfig} volunteerData={volunteerData} />
+            <FormFieldGroup
+                formConfig={formConfig}
+                onFieldChange={onFieldChange}
+                volunteerData={volunteerData}
+            />
             <div className="errors">{errorElements}</div>
             <div className="form-buttons">
                 <button className="btn" onClick={releaseVolunteer}>Cancel</button>
@@ -27,6 +32,7 @@ export default function Form({
 }
 
 Form.propTypes = {
+    formConfig: propTypes.formConfig.isRequired,
     errors: PropTypes.arrayOf(PropTypes.string).isRequired,
     onFieldChange: PropTypes.func.isRequired,
     onSave: PropTypes.func.isRequired,

@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import React from "react";
 
 import propTypes from "../propTypes";
-import VolunteerPicker from "./VolunteerPicker";
+import CsvContainer from "./CsvContainer";
 
 const RANGE = "A1:AA600";
 
@@ -14,6 +14,7 @@ export default class SpreadsheetContainer extends React.Component {
             spreadsheetData: null,
         };
         this.getSpreadsheetData = this.getSpreadsheetData.bind(this);
+        this.saveRow = this.saveRow.bind(this);
     }
 
     componentDidMount() {
@@ -38,16 +39,40 @@ export default class SpreadsheetContainer extends React.Component {
                     values,
                 },
             });
-        }).catch((reason) => {
+        }, (reason) => {
             this.setState({
                 error: reason.result.error.message,
             });
         });
     }
 
+    saveRow(rowNumber, rowData) {
+        const { parameters } = this.props;
+        const { spreadsheetId } = parameters;
+        const saveStart = 8;
+        const resource = {
+            values: [
+                rowData.slice(saveStart),
+            ],
+        };
+        const range = `I${rowNumber + 1}:S${rowNumber + 1}`;
+        return new Promise((resolve) => {
+            gapi.client.sheets.spreadsheets.values.update({
+                range,
+                resource,
+                spreadsheetId,
+                valueInputOption: "USER_ENTERED",
+            }).then(() => resolve(), (reason) => {
+                this.setState({
+                    error: reason.result.error.message,
+                });
+            });
+        });
+    }
+
     render() {
         const { error, spreadsheetData } = this.state;
-        const { stop, user } = this.props;
+        const { user } = this.props;
         if (error !== null) {
             return <div>{error}</div>;
         }
@@ -55,10 +80,10 @@ export default class SpreadsheetContainer extends React.Component {
             return <div>Loading ...</div>;
         }
         return (
-            <VolunteerPicker
+            <CsvContainer
                 spreadsheetData={spreadsheetData}
                 onResetSpreadsheet={this.getSpreadsheetData}
-                stop={stop}
+                onSaveRow={this.saveRow}
                 user={user}
             />
         );
@@ -67,6 +92,5 @@ export default class SpreadsheetContainer extends React.Component {
 
 SpreadsheetContainer.propTypes = {
     parameters: propTypes.appParameters.isRequired,
-    stop: PropTypes.func.isRequired,
-    user: propTypes.user,
+    user: propTypes.user.isRequired,
 };

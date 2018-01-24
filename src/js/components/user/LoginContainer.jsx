@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import React from "react";
 
 import LoginForm from "./LoginForm";
-import propTypes from "./propTypes";
+import propTypes from "../propTypes";
 import UserContainer from "./UserContainer";
 
 const clientId = OAUTH_CLIENT_ID || "674412593540-cm4if09mdfebk5e6j4enf0skdgt6t483.apps.googleusercontent.com";
@@ -54,7 +54,9 @@ export default class LoginContainer extends React.Component {
     }
 
     render() {
-        const { isLoggedIn, onUserChange, parameters, user } = this.props;
+        const {
+            isLoggedIn, onUserChange, parameters, user,
+        } = this.props;
         const { error } = this.state;
         if (error !== null) {
             return <div>{error}</div>;

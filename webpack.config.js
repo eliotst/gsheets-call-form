@@ -61,6 +61,7 @@ module.exports = (env = {}) => ({
     },
     plugins: [
         new webpack.DefinePlugin({
+            DEFAULT_SPREADSHEET_ID: JSON.stringify(env.DEFAULT_SPREADSHEET_ID),
             OAUTH_CLIENT_ID: JSON.stringify(env.OAUTH_CLIENT_ID),
         }),
         new CleanWebpackPlugin(["dist/*"]),
