@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import React from "react";
 
-import ConfigContainer from "./ConfigContainer";
+import ConfigContainer from "../spreadsheet/ConfigContainer";
 import propTypes from "../propTypes";
 
 const pickRandom = (arr) => {
@@ -12,7 +12,7 @@ const pickRandom = (arr) => {
 // refresh spreadsheet instead?
 const checkLock = (spreadsheetId, rowNumber) => {
     // TODO: don't hardcode J
-    const range = `J${rowNumber + 2}`;
+    const range = `M${rowNumber + 2}`;
     const params = {
         range,
         spreadsheetId,

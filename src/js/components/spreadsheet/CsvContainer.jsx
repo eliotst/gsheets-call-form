@@ -3,7 +3,8 @@ import React from "react";
 import { Route } from "react-router-dom";
 
 import propTypes from "../propTypes";
-import CallStarter from "./CallStarter";
+import CallStarter from "../dialer/CallStarter";
+import Map from "../map/Map";
 
 const buildFieldRowIndexMap = (header) => {
     const result = {};
@@ -63,7 +64,8 @@ export default class CsvContainer extends React.Component {
         const { spreadsheetId, values } = spreadsheetData;
         const fieldRowIndexMap = buildFieldRowIndexMap(values[0]);
         // TODO: add Call Lock, Caller, Contact Date if don't already exist
-        const csvValues = values.slice(1).map(row => mapSpreadsheetRowToVolunteer(row, fieldRowIndexMap));
+        const csvValues = values.slice(1).map(row =>
+            mapSpreadsheetRowToVolunteer(row, fieldRowIndexMap));
         this.setState({
             fieldRowIndexMap,
             spreadsheetData: {
@@ -98,7 +100,10 @@ export default class CsvContainer extends React.Component {
                 <Route
                     path="/map"
                     render={() => (
-                        <div>Map</div>
+                        <Map
+                            spreadsheetData={spreadsheetData}
+                            user={user}
+                        />
                     )}
                 />
                 <Route

@@ -56,7 +56,7 @@ export default class SpreadsheetContainer extends React.Component {
             ],
         };
         // TODO: don't hardcode I:S
-        const range = `I${rowNumber + 1}:T${rowNumber + 1}`;
+        const range = `I${rowNumber + 1}:W${rowNumber + 1}`;
         return new Promise((resolve) => {
             gapi.client.sheets.spreadsheets.values.update({
                 range,
