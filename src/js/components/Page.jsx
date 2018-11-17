@@ -38,3 +38,7 @@ Page.propTypes = {
     parameters: propTypes.appParameters.isRequired,
     user: propTypes.user,
 };
+
+Page.defaultProps = {
+    user: undefined,
+};

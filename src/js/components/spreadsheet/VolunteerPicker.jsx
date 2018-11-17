@@ -11,7 +11,8 @@ const pickRandom = (arr) => {
 
 // refresh spreadsheet instead?
 const checkLock = (spreadsheetId, rowNumber) => {
-    const range = `I${rowNumber + 1}`;
+    // TODO: don't hardcode J
+    const range = `J${rowNumber + 2}`;
     const params = {
         range,
         spreadsheetId,
