@@ -29,7 +29,7 @@ const user = PropTypes.shape({
     name: PropTypes.string.isRequired,
 });
 
-const volunteerData = PropTypes.shape({
+const personData = PropTypes.shape({
     name: PropTypes.string,
     phoneNumber: PropTypes.string,
     city: PropTypes.string,
@@ -39,7 +39,7 @@ const volunteerData = PropTypes.shape({
     contactDate: PropTypes.string,
     caller: PropTypes.string,
     contactStatus: PropTypes.string,
-    isInterestedInVolunteering: PropTypes.string,
+    isInterestedInPersoning: PropTypes.string,
     experienceWithLsu: PropTypes.string,
     interestAndSkills: PropTypes.string,
     willAttendRally: PropTypes.string,
@@ -53,5 +53,5 @@ export default {
     formConfig,
     spreadsheetData,
     user,
-    volunteerData,
+    personData,
 };

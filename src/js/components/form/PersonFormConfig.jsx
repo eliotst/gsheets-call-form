@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import React from "react";
 
 import propTypes from "../propTypes";
-import VolunteerContainer from "./VolunteerContainer";
+import PersonForm from "./PersonForm";
 
 const headerRegex = /^(.*?)\s?(\[.*\])?\s?(!?)\s?(\*?)\s?(#?)$/;
 
@@ -36,7 +36,7 @@ const parseConfig = (headerRow) => {
     }).filter(config => config !== null).filter(config => config.type !== "hidden");
 };
 
-export default class ConfigContainer extends React.Component {
+export default class PersonFormConfig extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -55,29 +55,29 @@ export default class ConfigContainer extends React.Component {
 
     render() {
         const {
-            onSaveRow, releaseVolunteer, spreadsheetData, stop, volunteerRow,
+            onSaveRow, releasePerson, spreadsheetData, stop, personRow,
         } = this.props;
         const { formConfig } = this.state;
         if (formConfig === null) {
             return <div>Loading ...</div>;
         }
         return (
-            <VolunteerContainer
+            <PersonForm
                 formConfig={formConfig}
                 onSaveRow={onSaveRow}
-                releaseVolunteer={releaseVolunteer}
+                releasePerson={releasePerson}
                 spreadsheetData={spreadsheetData}
                 stop={stop}
-                volunteerRow={volunteerRow}
+                personRow={personRow}
             />
         );
     }
 }
 
-ConfigContainer.propTypes = {
+PersonFormConfig.propTypes = {
     onSaveRow: PropTypes.func.isRequired,
-    releaseVolunteer: PropTypes.func.isRequired,
+    releasePerson: PropTypes.func.isRequired,
     spreadsheetData: propTypes.csvData.isRequired,
     stop: PropTypes.func.isRequired,
-    volunteerRow: PropTypes.number.isRequired,
+    personRow: PropTypes.number.isRequired,
 };

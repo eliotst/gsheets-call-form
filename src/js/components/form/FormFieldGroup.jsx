@@ -5,15 +5,14 @@ import propTypes from "../propTypes";
 import SelectField from "./fields/SelectField";
 import TextField from "./fields/TextField";
 
-const buildQuestion = (formFieldConfig, onFieldChange, volunteerData) => {
+const buildQuestion = (formFieldConfig, onFieldChange, personData) => {
     const fieldName = formFieldConfig.name;
-    const value = volunteerData[fieldName];
+    const value = personData[fieldName];
     switch (formFieldConfig.type) {
     case "select":
         return (
             <SelectField
                 formFieldConfig={formFieldConfig}
-                key={formFieldConfig.name}
                 onFieldChange={onFieldChange}
                 value={value}
             />);
@@ -21,7 +20,6 @@ const buildQuestion = (formFieldConfig, onFieldChange, volunteerData) => {
         return (
             <TextField
                 formFieldConfig={formFieldConfig}
-                key={formFieldConfig.name}
                 onFieldChange={onFieldChange}
                 value={value}
             />);
@@ -30,12 +28,14 @@ const buildQuestion = (formFieldConfig, onFieldChange, volunteerData) => {
     }
 };
 
-export default function FormFieldGroup({ formConfig, onFieldChange, volunteerData }) {
+export default function FormFieldGroup({ formConfig, onFieldChange, personData }) {
     const formFields = formConfig.filter(config => config.type !== "readonly");
-    const questions = formFields.map(formFieldConfig =>
-        buildQuestion(formFieldConfig, onFieldChange, volunteerData));
+    const questions = formFields.map(formFieldConfig => (
+        <div key={formFieldConfig.name} className="col-12">
+            {buildQuestion(formFieldConfig, onFieldChange, personData)}
+        </div>));
     return (
-        <div className="row form-question-group">
+        <div className="row form-field-group">
             {questions}
         </div>
     );
@@ -44,5 +44,5 @@ export default function FormFieldGroup({ formConfig, onFieldChange, volunteerDat
 FormFieldGroup.propTypes = {
     formConfig: propTypes.formConfig.isRequired,
     onFieldChange: PropTypes.func.isRequired,
-    volunteerData: propTypes.volunteerData.isRequired, // eslint-disable-line react/no-typos
+    personData: propTypes.personData.isRequired, // eslint-disable-line react/no-typos
 };

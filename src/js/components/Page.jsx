@@ -13,12 +13,12 @@ export default function Page({
     user,
 }) {
     return (
-        <div>
+        <div className="page container-fluid h-100 d-flex flex-column">
             <Nav
                 onUserChange={onUserChange}
                 user={user}
             />
-            <div className="container page">
+            <div className="content">
                 <LoginContainer
                     isLoggedIn={isLoggedIn}
                     onLoginStateChange={onLoginStateChange}
@@ -37,4 +37,8 @@ Page.propTypes = {
     onUserChange: PropTypes.func.isRequired,
     parameters: propTypes.appParameters.isRequired,
     user: propTypes.user,
+};
+
+Page.defaultProps = {
+    user: undefined,
 };

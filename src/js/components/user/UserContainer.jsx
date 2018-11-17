@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import React from "react";
 
 import propTypes from "../propTypes";
-import SpreadsheetContainer from "../spreadsheet/SpreadsheetContainer";
+import SpreadsheetContainer from "../SpreadsheetContainer";
 
 export default class UserContainer extends React.Component {
     constructor(props) {

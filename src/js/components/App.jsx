@@ -1,4 +1,4 @@
-import PropTypes from "prop-types";
+import { HashRouter } from "react-router-dom";
 import React from "react";
 
 import propTypes from "./propTypes";
@@ -29,7 +29,7 @@ export default class App extends React.Component {
         const { isLoggedIn, user } = this.state;
         const { parameters } = this.props;
         return (
-            <div>
+            <HashRouter>
                 <Page
                     isLoggedIn={isLoggedIn}
                     onLoginStateChange={this.onLoginStateChange}
@@ -37,7 +37,7 @@ export default class App extends React.Component {
                     parameters={parameters}
                     user={user}
                 />
-            </div>
+            </HashRouter>
         );
     }
 }

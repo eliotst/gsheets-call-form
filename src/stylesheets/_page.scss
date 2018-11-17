@@ -1,5 +1,21 @@
+body, html {
+    height: 100%;
+}
+
+#app {
+    height: 100%;
+}
+
 .page {
-    padding: 20px;
+    &.container-fluid {
+        padding-left: 0;
+        padding-right: 0;
+    }
+}
+
+.content {
+    flex: 1 1 auto;
+    position: relative;
 }
 
 .call-dashboard {
@@ -8,4 +24,8 @@
     label {
         font-size: 1.3rem;
     }
+}
+
+.module-picker {
+    margin-top: 10px;
 }
