@@ -29,7 +29,7 @@ export default class SpreadsheetContainer extends React.Component {
             spreadsheetId,
             range: RANGE,
         };
-        gapi.client.sheets.spreadsheets.values.get(params).then((response) => {
+        return gapi.client.sheets.spreadsheets.values.get(params).then((response) => {
             const { result } = response;
             const { values } = result;
             this.setState({
@@ -39,6 +39,7 @@ export default class SpreadsheetContainer extends React.Component {
                     values,
                 },
             });
+            return response;
         }, (reason) => {
             this.setState({
                 error: reason.result.error.message,
@@ -63,11 +64,11 @@ export default class SpreadsheetContainer extends React.Component {
                 resource,
                 spreadsheetId,
                 valueInputOption: "USER_ENTERED",
-            }).then(() => resolve(), (reason) => {
+            }).then(() => null, (reason) => {
                 this.setState({
                     error: reason.result.error.message,
                 });
-            });
+            }).then(() => this.getSpreadsheetData()).then(result => resolve(result));
         });
     }
 

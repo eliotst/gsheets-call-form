@@ -4,7 +4,7 @@ import { Route } from "react-router-dom";
 
 import propTypes from "../propTypes";
 import CallStarter from "../dialer/CallStarter";
-import Map from "../map/Map";
+import CanvasRouter from "../canvas/CanvasRouter";
 
 const buildFieldRowIndexMap = (header) => {
     const result = {};
@@ -100,9 +100,10 @@ export default class CsvContainer extends React.Component {
                 <Route
                     path="/map"
                     render={() => (
-                        <Map
+                        <CanvasRouter
+                            onResetSpreadsheet={onResetSpreadsheet}
+                            onSaveRow={this.onSaveRow}
                             spreadsheetData={spreadsheetData}
-                            user={user}
                         />
                     )}
                 />

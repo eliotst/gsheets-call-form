@@ -9,17 +9,6 @@ const pickRandom = (arr) => {
     return arr[randomIndex];
 };
 
-// refresh spreadsheet instead?
-const checkLock = (spreadsheetId, rowNumber) => {
-    // TODO: don't hardcode J
-    const range = `M${rowNumber + 2}`;
-    const params = {
-        range,
-        spreadsheetId,
-    };
-    return gapi.client.sheets.spreadsheets.values.get(params);
-};
-
 export default class VolunteerPicker extends React.Component {
     constructor(props) {
         super(props);
@@ -56,7 +45,6 @@ export default class VolunteerPicker extends React.Component {
             onSaveRow, spreadsheetData, stop, user,
         } = this.props;
         const caller = user.id;
-        const { spreadsheetId } = spreadsheetData;
         spreadsheetData.values.forEach((row, index) => {
             const lockValue = row["Call Lock #"];
             const phoneNumber = row["Phone Number *"];
@@ -76,33 +64,21 @@ export default class VolunteerPicker extends React.Component {
         rowData["Call Lock #"] = lockValue.toString();
         rowData["Caller *"] = caller;
         rowData["Contact Date *"] = new Date().toISOString();
-        return onSaveRow(rowNumber, rowData).then(() => {
+        return onSaveRow(rowNumber, rowData).then((response) => {
             // TODO: Set state now, then refresh, then check incoming spreadsheet data vs. state
-            checkLock(spreadsheetId, rowNumber).then((response) => {
-                const { result } = response;
-                const { values } = result;
-                if (values[0][0] === lockValue.toString()) {
-                    this.setState({
-                        callDate: new Date(),
-                        caller,
-                        lockValue,
-                        volunteerRow: rowNumber,
-                    });
-                } else {
-                    stop();
-                }
-            }).catch((reason) => {
-                if (reason.result) {
-                    this.setState({
-                        error: reason.result.error.message,
-                    });
-                } else {
-                    this.setState({
-                        error: reason.toString(),
-                    });
-                }
+            const { result } = response;
+            const { values } = result;
+            // TODO: don't hardcode this
+            if (values[rowNumber + 1][12] === lockValue.toString()) {
+                this.setState({
+                    callDate: new Date(),
+                    caller,
+                    lockValue,
+                    volunteerRow: rowNumber,
+                });
+            } else {
                 stop();
-            });
+            }
         });
     }
 
