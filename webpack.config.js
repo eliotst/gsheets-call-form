@@ -1,7 +1,10 @@
 const CleanWebpackPlugin = require("clean-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
+const dotenv = require("dotenv");
 const path = require("path");
 const webpack = require("webpack");
+
+const envConfig = dotenv.config();
 
 module.exports = (env = {}) => ({
     devServer: {
@@ -61,8 +64,9 @@ module.exports = (env = {}) => ({
     },
     plugins: [
         new webpack.DefinePlugin({
-            DEFAULT_SPREADSHEET_ID: JSON.stringify(env.DEFAULT_SPREADSHEET_ID),
-            OAUTH_CLIENT_ID: JSON.stringify(env.OAUTH_CLIENT_ID),
+            DEFAULT_SPREADSHEET_ID: JSON.stringify(envConfig.parsed.DEFAULT_SPREADSHEET_ID),
+            OAUTH_CLIENT_ID: JSON.stringify(envConfig.parsed.OAUTH_CLIENT_ID),
+            GOOGLE_MAPS_API_KEY: JSON.stringify(envConfig.parsed.GOOGLE_MAPS_API_KEY),
         }),
         new CleanWebpackPlugin(["dist/*"]),
         new CopyWebpackPlugin([

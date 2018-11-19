@@ -28,6 +28,7 @@
     "babel-core": "^6.26.0",
     "clean-webpack-plugin": "^0.1.17",
     "css-loader": "^0.28.8",
+    "dotenv": "^6.1.0",
     "file-loader": "^1.1.6",
     "google-maps-react": "^2.0.2",
     "material-ui": "^0.20.0",

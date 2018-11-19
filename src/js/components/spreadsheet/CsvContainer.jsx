@@ -85,36 +85,6 @@ export default class CsvContainer extends React.Component {
             return <div>Loading ...</div>;
         }
         return (
-            <div>
-                <Route
-                    path="/call"
-                    render={() => (
-                        <CallStarter
-                            onResetSpreadsheet={onResetSpreadsheet}
-                            onSaveRow={this.onSaveRow}
-                            spreadsheetData={spreadsheetData}
-                            user={user}
-                        />
-                    )}
-                />
-                <Route
-                    path="/map"
-                    render={() => (
-                        <CanvasRouter
-                            onResetSpreadsheet={onResetSpreadsheet}
-                            onSaveRow={this.onSaveRow}
-                            spreadsheetData={spreadsheetData}
-                        />
-                    )}
-                />
-                <Route
-                    exact
-                    path="/"
-                    render={() => (
-                        <div>Default</div>
-                    )}
-                />
-            </div>
         );
     }
 }

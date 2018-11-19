@@ -65,11 +65,8 @@ export default class VolunteerPicker extends React.Component {
         rowData["Caller *"] = caller;
         rowData["Contact Date *"] = new Date().toISOString();
         return onSaveRow(rowNumber, rowData).then((response) => {
-            // TODO: Set state now, then refresh, then check incoming spreadsheet data vs. state
-            const { result } = response;
-            const { values } = result;
-            // TODO: don't hardcode this
-            if (values[rowNumber + 1][12] === lockValue.toString()) {
+            const { values } = response.spreadsheetData;
+            if (values[rowNumber]["Call Lock #"] === lockValue.toString()) {
                 this.setState({
                     callDate: new Date(),
                     caller,

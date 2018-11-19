@@ -126,4 +126,4 @@ CanvasMap.propTypes = {
     spreadsheetData: propTypes.spreadsheetData.isRequired,
 };
 
-export default withRouter(GoogleApiWrapper({ apiKey: "AIzaSyBo8plCgtYHZdsdtvDk_3S7oUPwjT9VUSU" })(CanvasMap));
+export default withRouter(GoogleApiWrapper({ apiKey: GOOGLE_MAPS_API_KEY })(CanvasMap));

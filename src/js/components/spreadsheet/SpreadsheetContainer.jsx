@@ -1,16 +1,47 @@
 import PropTypes from "prop-types";
 import React from "react";
+import { Route } from "react-router-dom";
 
 import propTypes from "../propTypes";
-import CsvContainer from "./CsvContainer";
+import CallStarter from "../dialer/CallStarter";
+import CanvasRouter from "../canvas/CanvasRouter";
 
 const RANGE = "A1:AA600";
+
+const buildFieldRowIndexMap = (header) => {
+    const result = {};
+    header.forEach((key, index) => {
+        result[key] = index;
+    });
+    return result;
+};
+
+const mapSpreadsheetRowToVolunteer = (row, fieldRowIndexMap) => {
+    const fieldNames = Object.keys(fieldRowIndexMap);
+    return fieldNames.reduce((acc, fieldName) => {
+        const result = acc;
+        const fieldIndex = fieldRowIndexMap[fieldName];
+        result[fieldName] = row[fieldIndex] || "";
+        return result;
+    }, {});
+};
+
+const mapVolunteerDataToSpreadsheetRow = (volunteerData, fieldRowIndexMap) => {
+    const fieldNames = Object.keys(fieldRowIndexMap);
+    const row = Array(fieldNames.length).fill("");
+    fieldNames.forEach((fieldName) => {
+        const fieldIndex = fieldRowIndexMap[fieldName];
+        row[fieldIndex] = volunteerData[fieldName];
+    });
+    return row;
+};
 
 export default class SpreadsheetContainer extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             error: null,
+            fieldRowIndexMap: null,
             spreadsheetData: null,
         };
         this.getSpreadsheetData = this.getSpreadsheetData.bind(this);
@@ -32,14 +63,22 @@ export default class SpreadsheetContainer extends React.Component {
         return gapi.client.sheets.spreadsheets.values.get(params).then((response) => {
             const { result } = response;
             const { values } = result;
+            const fieldRowIndexMap = buildFieldRowIndexMap(values[0]);
+            const csvValues = values.slice(1).map(row =>
+                mapSpreadsheetRowToVolunteer(row, fieldRowIndexMap));
+            const spreadsheetData = {
+                keys: values[0],
+                spreadsheetId,
+                values: csvValues,
+            };
             this.setState({
                 error: null,
-                spreadsheetData: {
-                    spreadsheetId,
-                    values,
-                },
+                fieldRowIndexMap,
+                spreadsheetData,
             });
-            return response;
+            return {
+                spreadsheetData,
+            };
         }, (reason) => {
             this.setState({
                 error: reason.result.error.message,
@@ -47,9 +86,27 @@ export default class SpreadsheetContainer extends React.Component {
         });
     }
 
-    saveRow(rowNumber, rowData) {
+    parseSpreedsheetData(spreadsheetData) {
+        const { spreadsheetId, values } = spreadsheetData;
+        const fieldRowIndexMap = buildFieldRowIndexMap(values[0]);
+        // TODO: add Call Lock, Caller, Contact Date if don't already exist
+        const csvValues = values.slice(1).map(row =>
+            mapSpreadsheetRowToVolunteer(row, fieldRowIndexMap));
+        this.setState({
+            fieldRowIndexMap,
+            spreadsheetData: {
+                keys: values[0],
+                spreadsheetId,
+                values: csvValues,
+            },
+        });
+    }
+
+    saveRow(rowNumber, csvData) {
         const { parameters } = this.props;
         const { spreadsheetId } = parameters;
+        const { fieldRowIndexMap } = this.state;
+        const rowData = mapVolunteerDataToSpreadsheetRow(csvData, fieldRowIndexMap);
         const saveStart = 8;
         const resource = {
             values: [
@@ -57,7 +114,7 @@ export default class SpreadsheetContainer extends React.Component {
             ],
         };
         // TODO: don't hardcode I:S
-        const range = `I${rowNumber + 1}:W${rowNumber + 1}`;
+        const range = `I${rowNumber + 2}:W${rowNumber + 2}`;
         return new Promise((resolve) => {
             gapi.client.sheets.spreadsheets.values.update({
                 range,
@@ -82,12 +139,36 @@ export default class SpreadsheetContainer extends React.Component {
             return <div>Loading ...</div>;
         }
         return (
-            <CsvContainer
-                spreadsheetData={spreadsheetData}
-                onResetSpreadsheet={this.getSpreadsheetData}
-                onSaveRow={this.saveRow}
-                user={user}
-            />
+            <div>
+                <Route
+                    path="/call"
+                    render={() => (
+                        <CallStarter
+                            onResetSpreadsheet={this.getSpreadsheetData}
+                            onSaveRow={this.saveRow}
+                            spreadsheetData={spreadsheetData}
+                            user={user}
+                        />
+                    )}
+                />
+                <Route
+                    path="/map"
+                    render={() => (
+                        <CanvasRouter
+                            onResetSpreadsheet={this.getSpreadsheetData}
+                            onSaveRow={this.saveRow}
+                            spreadsheetData={spreadsheetData}
+                        />
+                    )}
+                />
+                <Route
+                    exact
+                    path="/"
+                    render={() => (
+                        <div>Default</div>
+                    )}
+                />
+            </div>
         );
     }
 }
