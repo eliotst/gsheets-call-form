@@ -3,7 +3,7 @@ import React from "react";
 
 import CallDashboard from "./CallDashboard";
 import propTypes from "../propTypes";
-import VolunteerPicker from "./VolunteerPicker";
+import PersonPicker from "./PersonPicker";
 
 export default class CallStarter extends React.Component {
     constructor(props) {
@@ -27,7 +27,7 @@ export default class CallStarter extends React.Component {
         }
         const stop = () => this.setState({ started: false });
         return (
-            <VolunteerPicker
+            <PersonPicker
                 onSaveRow={onSaveRow}
                 spreadsheetData={spreadsheetData}
                 stop={stop}

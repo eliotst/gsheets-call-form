@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import React from "react";
 
-import ConfigContainer from "../spreadsheet/ConfigContainer";
+import PersonFormConfig from "../form/PersonFormConfig";
 import propTypes from "../propTypes";
 
 const pickRandom = (arr) => {
@@ -9,7 +9,7 @@ const pickRandom = (arr) => {
     return arr[randomIndex];
 };
 
-export default class VolunteerPicker extends React.Component {
+export default class PersonPicker extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -116,7 +116,7 @@ export default class VolunteerPicker extends React.Component {
             return <div>Loading ...</div>;
         }
         return (
-            <ConfigContainer
+            <PersonFormConfig
                 onSaveRow={this.onSaveRow}
                 releaseVolunteer={this.releaseVolunteer}
                 spreadsheetData={spreadsheetData}
@@ -127,7 +127,7 @@ export default class VolunteerPicker extends React.Component {
     }
 }
 
-VolunteerPicker.propTypes = {
+PersonPicker.propTypes = {
     onSaveRow: PropTypes.func.isRequired,
     spreadsheetData: propTypes.csvData.isRequired,
     stop: PropTypes.func.isRequired,

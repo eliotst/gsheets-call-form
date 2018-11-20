@@ -1,10 +1,9 @@
-import PropTypes from "prop-types";
 import React from "react";
 import { Route } from "react-router-dom";
 
-import propTypes from "../propTypes";
-import CallStarter from "../dialer/CallStarter";
-import CanvasRouter from "../canvas/CanvasRouter";
+import propTypes from "./propTypes";
+import CallRouter from "./dialer/CallRouter";
+import CanvasRouter from "./canvas/CanvasRouter";
 
 const RANGE = "A1:AA600";
 
@@ -14,6 +13,18 @@ const buildFieldRowIndexMap = (header) => {
         result[key] = index;
     });
     return result;
+};
+
+const columnToLetter = (column) => {
+    let temp = "";
+    let letter = "";
+    let currentColumn = column;
+    while (currentColumn > 0) {
+        temp = (column - 1) % 26;
+        letter = String.fromCharCode(temp + 65) + letter;
+        currentColumn = (currentColumn - temp - 1) / 26;
+    }
+    return letter;
 };
 
 const mapSpreadsheetRowToVolunteer = (row, fieldRowIndexMap) => {
@@ -107,14 +118,14 @@ export default class SpreadsheetContainer extends React.Component {
         const { spreadsheetId } = parameters;
         const { fieldRowIndexMap } = this.state;
         const rowData = mapVolunteerDataToSpreadsheetRow(csvData, fieldRowIndexMap);
-        const saveStart = 8;
         const resource = {
             values: [
-                rowData.slice(saveStart),
+                rowData,
             ],
         };
         // TODO: don't hardcode I:S
-        const range = `I${rowNumber + 2}:W${rowNumber + 2}`;
+        const rangeEnd = columnToLetter(rowData.length);
+        const range = `A${rowNumber + 2}:${rangeEnd}${rowNumber + 2}`;
         return new Promise((resolve) => {
             gapi.client.sheets.spreadsheets.values.update({
                 range,
@@ -143,7 +154,7 @@ export default class SpreadsheetContainer extends React.Component {
                 <Route
                     path="/call"
                     render={() => (
-                        <CallStarter
+                        <CallRouter
                             onResetSpreadsheet={this.getSpreadsheetData}
                             onSaveRow={this.saveRow}
                             spreadsheetData={spreadsheetData}
@@ -165,7 +176,10 @@ export default class SpreadsheetContainer extends React.Component {
                     exact
                     path="/"
                     render={() => (
-                        <div>Default</div>
+                        <div className="form-buttons">
+                            <a className="btn" href="#/call">Call</a>
+                            <a className="btn" href="#/map">Canvas</a>
+                        </div>
                     )}
                 />
             </div>

@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import React from "react";
 import { withRouter } from "react-router-dom";
 
-import ConfigContainer from "../spreadsheet/ConfigContainer";
+import PersonFormConfig from "../form/PersonFormConfig";
 import propTypes from "../propTypes";
 
 function CanvasForm({
@@ -12,7 +12,7 @@ function CanvasForm({
     const releaseVolunteer = () => stop();
     const save = rowData => onSaveRow(volunteerRow, rowData);
     return (
-        <ConfigContainer
+        <PersonFormConfig
             onSaveRow={save}
             releaseVolunteer={releaseVolunteer}
             spreadsheetData={spreadsheetData}

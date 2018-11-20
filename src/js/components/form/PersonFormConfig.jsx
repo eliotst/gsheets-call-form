@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import React from "react";
 
 import propTypes from "../propTypes";
-import VolunteerContainer from "./VolunteerContainer";
+import PersonForm from "./PersonForm";
 
 const headerRegex = /^(.*?)\s?(\[.*\])?\s?(!?)\s?(\*?)\s?(#?)$/;
 
@@ -36,7 +36,7 @@ const parseConfig = (headerRow) => {
     }).filter(config => config !== null).filter(config => config.type !== "hidden");
 };
 
-export default class ConfigContainer extends React.Component {
+export default class PersonFormConfig extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -62,7 +62,7 @@ export default class ConfigContainer extends React.Component {
             return <div>Loading ...</div>;
         }
         return (
-            <VolunteerContainer
+            <PersonForm
                 formConfig={formConfig}
                 onSaveRow={onSaveRow}
                 releaseVolunteer={releaseVolunteer}
@@ -74,7 +74,7 @@ export default class ConfigContainer extends React.Component {
     }
 }
 
-ConfigContainer.propTypes = {
+PersonFormConfig.propTypes = {
     onSaveRow: PropTypes.func.isRequired,
     releaseVolunteer: PropTypes.func.isRequired,
     spreadsheetData: propTypes.csvData.isRequired,

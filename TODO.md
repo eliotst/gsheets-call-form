@@ -2,16 +2,13 @@
 
 ## Short Term
 
-2. don't hardcode ranges
-3. merge VolunteerContainer and Form, rename ConfigContainer
-4. make module picker
-5. make CallStarter a router
 6. on pick, redirect to person
 7. volunteer -> person
 8. canvassing
-  1. don't hardcode center point
-  2. support merging into a bubble
-  3. households vs. people
+  1. color people who have been canvassed already
+  2. don't hardcode center point
+  3. support merging into a bubble
+  4. households vs. people
 9. turf tracker
   1. create new spreadsheet
   2. assign person to spreadsheet
@@ -20,13 +17,16 @@
 10. config-driven forms
   1. create config from another sheet
 11. styling
-  1. overall
+  1. replace with bootstrap
   2. map icons
     1. visited house
     2. current location
 12. no default spreadsheet
   1. embed into URL
   2. ask if none provided
+13. update react version
+14. error handling
+  1. lock breaks
 
 ## Long Term
 

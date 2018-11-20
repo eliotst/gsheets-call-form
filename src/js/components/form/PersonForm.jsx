@@ -1,7 +1,8 @@
 import PropTypes from "prop-types";
 import React from "react";
 
-import Form from "../form/Form";
+import FormHeader from "../form/FormHeader";
+import FormFieldGroup from "../form/FormFieldGroup";
 import propTypes from "../propTypes";
 
 const validate = (volunteer) => {
@@ -83,15 +84,22 @@ export default class VolunteerContainer extends React.Component {
         if (volunteerData === null) {
             return <div>Loading ...</div>;
         }
+        const errorElements = validationErrors.map(message =>
+            <div className="message">{message}</div>);
         return (
-            <Form
-                errors={validationErrors}
-                formConfig={formConfig}
-                onFieldChange={this.onFieldChange}
-                onSave={this.onSave}
-                releaseVolunteer={releaseVolunteer}
-                volunteerData={volunteerData}
-            />
+            <div>
+                <FormHeader formConfig={formConfig} volunteerData={volunteerData} />
+                <FormFieldGroup
+                    formConfig={formConfig}
+                    onFieldChange={this.onFieldChange}
+                    volunteerData={volunteerData}
+                />
+                <div className="errors">{errorElements}</div>
+                <div className="form-buttons">
+                    <button className="btn" onClick={releaseVolunteer}>Cancel</button>
+                    <button className="btn" onClick={this.onSave}>Save</button>
+                </div>
+            </div>
         );
     }
 }
