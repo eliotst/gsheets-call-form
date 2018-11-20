@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import React from "react";
 
-import PersonFormConfig from "../form/PersonFormConfig";
+import PersonLock from "./PersonLock";
 import propTypes from "../propTypes";
 
 const pickRandom = (arr) => {
@@ -13,38 +13,19 @@ export default class PersonPicker extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            callDate: null,
-            caller: null,
             error: null,
-            lockValue: null,
-            volunteerRow: null,
         };
-        this.releaseVolunteer = this.releaseVolunteer.bind(this);
-        this.onSaveRow = this.onSaveRow.bind(this);
     }
 
     componentDidMount() {
-        this.pickVolunteer();
+        this.pickPerson();
     }
 
-    onSaveRow(rowData) {
-        const { onSaveRow } = this.props;
-        const {
-            callDate, caller, lockValue, volunteerRow,
-        } = this.state;
-        const row = Object.assign({}, rowData);
-        row["Call Lock #"] = lockValue.toString();
-        row["Caller *"] = caller;
-        row["Contact Date *"] = callDate;
-        return onSaveRow(volunteerRow, row);
-    }
-
-    pickVolunteer() {
+    pickPerson() {
         const possibleRows = [];
         const {
-            onSaveRow, spreadsheetData, stop, user,
+            selectPerson, spreadsheetData,
         } = this.props;
-        const caller = user.id;
         spreadsheetData.values.forEach((row, index) => {
             const lockValue = row["Call Lock #"];
             const phoneNumber = row["Phone Number *"];
@@ -59,47 +40,14 @@ export default class PersonPicker extends React.Component {
             });
         }
         const rowNumber = pickRandom(possibleRows);
-        const lockValue = Math.ceil(Math.random() * 1000000);
-        const rowData = spreadsheetData.values[rowNumber];
-        rowData["Call Lock #"] = lockValue.toString();
-        rowData["Caller *"] = caller;
-        rowData["Contact Date *"] = new Date().toISOString();
-        return onSaveRow(rowNumber, rowData).then((response) => {
-            const { values } = response.spreadsheetData;
-            if (values[rowNumber]["Call Lock #"] === lockValue.toString()) {
-                this.setState({
-                    callDate: new Date(),
-                    caller,
-                    lockValue,
-                    volunteerRow: rowNumber,
-                });
-            } else {
-                stop();
-            }
-        });
-    }
-
-    releaseVolunteer() {
-        const { volunteerRow } = this.state;
-        const { onSaveRow, spreadsheetData, stop } = this.props;
-        const rowData = spreadsheetData.values[volunteerRow];
-        rowData["Call Lock #"] = "";
-        rowData["Caller *"] = "";
-        rowData["Contact Date *"] = "";
-        onSaveRow(volunteerRow, rowData).then(() => {
-            stop();
-        }).catch((reason) => {
-            this.setState({
-                error: reason.result.error.message,
-            });
-        });
+        return selectPerson(rowNumber);
     }
 
     render() {
         const {
-            spreadsheetData, stop,
+            stop,
         } = this.props;
-        const { error, volunteerRow } = this.state;
+        const { error } = this.state;
         if (error !== null) {
             return (
                 <div>
@@ -112,24 +60,12 @@ export default class PersonPicker extends React.Component {
                 </div>
             );
         }
-        if (volunteerRow === null) {
-            return <div>Loading ...</div>;
-        }
-        return (
-            <PersonFormConfig
-                onSaveRow={this.onSaveRow}
-                releaseVolunteer={this.releaseVolunteer}
-                spreadsheetData={spreadsheetData}
-                stop={stop}
-                volunteerRow={volunteerRow}
-            />
-        );
+        return <div>Loading ...</div>;
     }
 }
 
 PersonPicker.propTypes = {
-    onSaveRow: PropTypes.func.isRequired,
+    selectPerson: PropTypes.func.isRequired,
     spreadsheetData: propTypes.csvData.isRequired,
     stop: PropTypes.func.isRequired,
-    user: propTypes.user.isRequired,
 };

@@ -12,12 +12,12 @@ export default function CanvasRouter({
     return (
         <div>
             <Route
-                path="/map/:volunteerId" // TODO: properly nest
+                path="/map/:personId" // TODO: properly nest
                 render={routeProps => (
                     <CanvasForm
                         onSaveRow={onSaveRow}
                         spreadsheetData={spreadsheetData}
-                        volunteerRow={parseInt(routeProps.match.params.volunteerId, 10)}
+                        personRow={parseInt(routeProps.match.params.personId, 10)}
                     />
                 )}
             />

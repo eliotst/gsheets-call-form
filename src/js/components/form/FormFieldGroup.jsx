@@ -5,9 +5,9 @@ import propTypes from "../propTypes";
 import SelectField from "./fields/SelectField";
 import TextField from "./fields/TextField";
 
-const buildQuestion = (formFieldConfig, onFieldChange, volunteerData) => {
+const buildQuestion = (formFieldConfig, onFieldChange, personData) => {
     const fieldName = formFieldConfig.name;
-    const value = volunteerData[fieldName];
+    const value = personData[fieldName];
     switch (formFieldConfig.type) {
     case "select":
         return (
@@ -30,10 +30,10 @@ const buildQuestion = (formFieldConfig, onFieldChange, volunteerData) => {
     }
 };
 
-export default function FormFieldGroup({ formConfig, onFieldChange, volunteerData }) {
+export default function FormFieldGroup({ formConfig, onFieldChange, personData }) {
     const formFields = formConfig.filter(config => config.type !== "readonly");
     const questions = formFields.map(formFieldConfig =>
-        buildQuestion(formFieldConfig, onFieldChange, volunteerData));
+        buildQuestion(formFieldConfig, onFieldChange, personData));
     return (
         <div className="row form-question-group">
             {questions}
@@ -44,5 +44,5 @@ export default function FormFieldGroup({ formConfig, onFieldChange, volunteerDat
 FormFieldGroup.propTypes = {
     formConfig: propTypes.formConfig.isRequired,
     onFieldChange: PropTypes.func.isRequired,
-    volunteerData: propTypes.volunteerData.isRequired, // eslint-disable-line react/no-typos
+    personData: propTypes.personData.isRequired, // eslint-disable-line react/no-typos
 };

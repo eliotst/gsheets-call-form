@@ -5,44 +5,44 @@ import FormHeader from "../form/FormHeader";
 import FormFieldGroup from "../form/FormFieldGroup";
 import propTypes from "../propTypes";
 
-const validate = (volunteer) => {
+const validate = (person) => {
     const errors = [];
-    if (volunteer.contactStatus === "") {
+    if (person.contactStatus === "") {
         errors.push("You must provide a Contact Status.");
     }
     return errors;
 };
 
-export default class VolunteerContainer extends React.Component {
+export default class PersonContainer extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             error: null,
             validationErrors: [],
-            volunteerData: null,
+            personData: null,
         };
         this.onFieldChange = this.onFieldChange.bind(this);
         this.onSave = this.onSave.bind(this);
     }
 
     componentDidMount() {
-        this.buildVolunteer();
+        this.buildPerson();
     }
 
     onFieldChange(name, value) {
-        const { volunteerData } = this.state;
-        volunteerData[name] = value;
+        const { personData } = this.state;
+        personData[name] = value;
         this.setState({
             validationErrors: [],
-            volunteerData,
+            personData,
         });
     }
 
     onSave() {
         const { onSaveRow, stop } = this.props;
-        const { volunteerData } = this.state;
-        const row = volunteerData;
-        const validationErrors = validate(volunteerData);
+        const { personData } = this.state;
+        const row = personData;
+        const validationErrors = validate(personData);
         if (validationErrors.length !== 0) {
             this.setState({ validationErrors });
             return Promise.resolve();
@@ -58,17 +58,17 @@ export default class VolunteerContainer extends React.Component {
         });
     }
 
-    buildVolunteer() {
-        const { spreadsheetData, volunteerRow } = this.props;
-        const volunteerData = spreadsheetData.values[volunteerRow];
+    buildPerson() {
+        const { spreadsheetData, personRow } = this.props;
+        const personData = spreadsheetData.values[personRow];
         this.setState({
-            volunteerData,
+            personData,
         });
     }
 
     render() {
-        const { error, validationErrors, volunteerData } = this.state;
-        const { formConfig, releaseVolunteer, stop } = this.props;
+        const { error, validationErrors, personData } = this.state;
+        const { formConfig, releasePerson, stop } = this.props;
         if (error !== null) {
             return (
                 <div>
@@ -81,22 +81,22 @@ export default class VolunteerContainer extends React.Component {
                 </div>
             );
         }
-        if (volunteerData === null) {
+        if (personData === null) {
             return <div>Loading ...</div>;
         }
         const errorElements = validationErrors.map(message =>
             <div className="message">{message}</div>);
         return (
             <div>
-                <FormHeader formConfig={formConfig} volunteerData={volunteerData} />
+                <FormHeader formConfig={formConfig} personData={personData} />
                 <FormFieldGroup
                     formConfig={formConfig}
                     onFieldChange={this.onFieldChange}
-                    volunteerData={volunteerData}
+                    personData={personData}
                 />
                 <div className="errors">{errorElements}</div>
                 <div className="form-buttons">
-                    <button className="btn" onClick={releaseVolunteer}>Cancel</button>
+                    <button className="btn" onClick={releasePerson}>Cancel</button>
                     <button className="btn" onClick={this.onSave}>Save</button>
                 </div>
             </div>
@@ -104,11 +104,11 @@ export default class VolunteerContainer extends React.Component {
     }
 }
 
-VolunteerContainer.propTypes = {
+PersonContainer.propTypes = {
     formConfig: propTypes.formConfig.isRequired,
     onSaveRow: PropTypes.func.isRequired,
-    releaseVolunteer: PropTypes.func.isRequired,
+    releasePerson: PropTypes.func.isRequired,
     spreadsheetData: propTypes.csvData.isRequired,
     stop: PropTypes.func.isRequired,
-    volunteerRow: PropTypes.number.isRequired,
+    personRow: PropTypes.number.isRequired,
 };

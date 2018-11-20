@@ -55,7 +55,7 @@ export default class PersonFormConfig extends React.Component {
 
     render() {
         const {
-            onSaveRow, releaseVolunteer, spreadsheetData, stop, volunteerRow,
+            onSaveRow, releasePerson, spreadsheetData, stop, personRow,
         } = this.props;
         const { formConfig } = this.state;
         if (formConfig === null) {
@@ -65,10 +65,10 @@ export default class PersonFormConfig extends React.Component {
             <PersonForm
                 formConfig={formConfig}
                 onSaveRow={onSaveRow}
-                releaseVolunteer={releaseVolunteer}
+                releasePerson={releasePerson}
                 spreadsheetData={spreadsheetData}
                 stop={stop}
-                volunteerRow={volunteerRow}
+                personRow={personRow}
             />
         );
     }
@@ -76,8 +76,8 @@ export default class PersonFormConfig extends React.Component {
 
 PersonFormConfig.propTypes = {
     onSaveRow: PropTypes.func.isRequired,
-    releaseVolunteer: PropTypes.func.isRequired,
+    releasePerson: PropTypes.func.isRequired,
     spreadsheetData: propTypes.csvData.isRequired,
     stop: PropTypes.func.isRequired,
-    volunteerRow: PropTypes.number.isRequired,
+    personRow: PropTypes.number.isRequired,
 };

@@ -4,6 +4,21 @@ import { Map, InfoWindow, Marker, GoogleApiWrapper } from "google-maps-react";
 
 import propTypes from "../propTypes";
 
+function determineIcon(google, person) {
+    const statusColorMap = {
+        Contacted: "blue",
+        "Bad Number": "purple",
+        "No Answer": "orange",
+    };
+    const color = statusColorMap[person["Contact Status [No Answer, Contacted, Bad Number, Do Not Call, Left a Voicemail] !"]] || "grey";
+    const iconUrl = `http://maps.google.com/mapfiles/ms/icons/${color}.png`;
+    return {
+        anchor: new google.maps.Point(32, 32),
+        scaledSize: new google.maps.Size(32, 32),
+        url: iconUrl,
+    };
+}
+
 class CanvasMap extends React.Component {
     constructor(props) {
         super(props);
@@ -79,6 +94,7 @@ class CanvasMap extends React.Component {
         const markers = values.map((person, index) => (
             <Marker
                 key={person["Full Name *"]}
+                icon={determineIcon(google, person)}
                 name={person["Full Name *"]}
                 onClick={(props, marker) => this.clickMarker(marker, index)}
                 position={{

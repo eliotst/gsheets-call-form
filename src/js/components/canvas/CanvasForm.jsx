@@ -6,18 +6,18 @@ import PersonFormConfig from "../form/PersonFormConfig";
 import propTypes from "../propTypes";
 
 function CanvasForm({
-    history, onSaveRow, spreadsheetData, volunteerRow,
+    history, onSaveRow, spreadsheetData, personRow,
 }) {
     const stop = () => history.push("/map");
-    const releaseVolunteer = () => stop();
-    const save = rowData => onSaveRow(volunteerRow, rowData);
+    const releasePerson = () => stop();
+    const save = rowData => onSaveRow(personRow, rowData);
     return (
         <PersonFormConfig
             onSaveRow={save}
-            releaseVolunteer={releaseVolunteer}
+            releasePerson={releasePerson}
             spreadsheetData={spreadsheetData}
             stop={stop}
-            volunteerRow={volunteerRow}
+            personRow={personRow}
         />
     );
 }
@@ -25,7 +25,7 @@ function CanvasForm({
 CanvasForm.propTypes = {
     onSaveRow: PropTypes.func.isRequired,
     spreadsheetData: propTypes.csvData.isRequired,
-    volunteerRow: PropTypes.number.isRequired,
+    personRow: PropTypes.number.isRequired,
 };
 
 export default withRouter(CanvasForm);

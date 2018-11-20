@@ -27,7 +27,7 @@ const columnToLetter = (column) => {
     return letter;
 };
 
-const mapSpreadsheetRowToVolunteer = (row, fieldRowIndexMap) => {
+const mapSpreadsheetRowToPerson = (row, fieldRowIndexMap) => {
     const fieldNames = Object.keys(fieldRowIndexMap);
     return fieldNames.reduce((acc, fieldName) => {
         const result = acc;
@@ -37,12 +37,12 @@ const mapSpreadsheetRowToVolunteer = (row, fieldRowIndexMap) => {
     }, {});
 };
 
-const mapVolunteerDataToSpreadsheetRow = (volunteerData, fieldRowIndexMap) => {
+const mapPersonDataToSpreadsheetRow = (personData, fieldRowIndexMap) => {
     const fieldNames = Object.keys(fieldRowIndexMap);
     const row = Array(fieldNames.length).fill("");
     fieldNames.forEach((fieldName) => {
         const fieldIndex = fieldRowIndexMap[fieldName];
-        row[fieldIndex] = volunteerData[fieldName];
+        row[fieldIndex] = personData[fieldName];
     });
     return row;
 };
@@ -76,7 +76,7 @@ export default class SpreadsheetContainer extends React.Component {
             const { values } = result;
             const fieldRowIndexMap = buildFieldRowIndexMap(values[0]);
             const csvValues = values.slice(1).map(row =>
-                mapSpreadsheetRowToVolunteer(row, fieldRowIndexMap));
+                mapSpreadsheetRowToPerson(row, fieldRowIndexMap));
             const spreadsheetData = {
                 keys: values[0],
                 spreadsheetId,
@@ -102,7 +102,7 @@ export default class SpreadsheetContainer extends React.Component {
         const fieldRowIndexMap = buildFieldRowIndexMap(values[0]);
         // TODO: add Call Lock, Caller, Contact Date if don't already exist
         const csvValues = values.slice(1).map(row =>
-            mapSpreadsheetRowToVolunteer(row, fieldRowIndexMap));
+            mapSpreadsheetRowToPerson(row, fieldRowIndexMap));
         this.setState({
             fieldRowIndexMap,
             spreadsheetData: {
@@ -117,7 +117,7 @@ export default class SpreadsheetContainer extends React.Component {
         const { parameters } = this.props;
         const { spreadsheetId } = parameters;
         const { fieldRowIndexMap } = this.state;
-        const rowData = mapVolunteerDataToSpreadsheetRow(csvData, fieldRowIndexMap);
+        const rowData = mapPersonDataToSpreadsheetRow(csvData, fieldRowIndexMap);
         const resource = {
             values: [
                 rowData,

@@ -10,13 +10,13 @@ const pairUp = array => array.reduce((result, value, index) => {
     return result;
 }, []);
 
-export default function FormHeader({ formConfig, volunteerData }) {
+export default function FormHeader({ formConfig, personData }) {
     const headerConfigs = formConfig.filter(config => config.type === "readonly");
     const headerFields = headerConfigs.map(config =>
         (<ReadOnlyField
             displayName={config.displayName}
             key={config.name}
-            value={volunteerData[config.name]}
+            value={personData[config.name]}
         />));
     const headerFieldPairs = pairUp(headerFields);
     const rows = headerFieldPairs.map((pair, index) =>
@@ -30,5 +30,5 @@ export default function FormHeader({ formConfig, volunteerData }) {
 
 FormHeader.propTypes = {
     formConfig: propTypes.formConfig.isRequired,
-    volunteerData: propTypes.volunteerData.isRequired, // eslint-disable-line react/no-typos
+    personData: propTypes.personData.isRequired, // eslint-disable-line react/no-typos
 };

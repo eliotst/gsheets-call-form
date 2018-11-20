@@ -2,10 +2,8 @@
 
 ## Short Term
 
-6. on pick, redirect to person
-7. volunteer -> person
+1. make contact status special
 8. canvassing
-  1. color people who have been canvassed already
   2. don't hardcode center point
   3. support merging into a bubble
   4. households vs. people
@@ -14,8 +12,9 @@
   2. assign person to spreadsheet
   3. share spreadsheet with canvasser/dialer
   4. merge spreadsheet back
+  5. assign form to person
 10. config-driven forms
-  1. create config from another sheet
+  1. create config from another worksheet
 11. styling
   1. replace with bootstrap
   2. map icons
@@ -34,6 +33,7 @@
   1. personal stats
   2. overall stats
 2. call history
+  1. log to another worksheet?
 3. multiple contacts for the same person
 4. handle multiple people using same login
 5. browse through people and bring up form for specific person
