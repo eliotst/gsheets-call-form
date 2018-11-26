@@ -1,3 +1,5 @@
+import axios from "axios";
+import PropTypes from "prop-types";
 import React from "react";
 import { withRouter } from "react-router-dom";
 import { Map, InfoWindow, Marker, GoogleApiWrapper } from "google-maps-react";
@@ -38,6 +40,7 @@ class CanvasMap extends React.Component {
         if (navigator && navigator.geolocation) {
             this.getCurrentLocation();
             setInterval(this.getCurrentLocation, 5000);
+            this.geoCodeEveryone();
         }
     }
 
@@ -61,6 +64,30 @@ class CanvasMap extends React.Component {
             clearInterval(this.locationInterval);
             this.locationInterval = null;
         });
+    }
+
+    geoCodeEveryone() {
+        const { spreadsheetData } = this.props;
+        const { values } = spreadsheetData;
+        values.forEach((person, rowNumber) => {
+            if (person["Lat #"] === "" || person["Long #"] === "") {
+                this.geoCode(person, rowNumber);
+            }
+        });
+    }
+
+    geoCode(person, rowNumber) {
+        const { onSaveRow } = this.props;
+        const addressString = `${person["Address *"]}, ${person["ZIP *"]}`;
+        return axios.get(`https://maps.googleapis.com/maps/api/geocode/json?key=${GOOGLE_MAPS_API_KEY}&address=${addressString}`)
+            .then((response) => {
+                const firstResult = response.data.results[0];
+                const latLong = firstResult.geometry.location;
+                const newPerson = person;
+                newPerson["Lat #"] = latLong.lat;
+                newPerson["Long #"] = latLong.lng;
+                onSaveRow(rowNumber, person);
+            });
     }
 
     clickMarker(marker, index) {
@@ -102,6 +129,9 @@ class CanvasMap extends React.Component {
                     lng: person["Long #"],
                 }}
             />));
+        if (center.lat === "" && currentLocation === null) {
+            return <div>Loading...</div>;
+        }
         if (currentLocation !== null) {
             markers.push(<Marker
                 icon={{
@@ -139,6 +169,7 @@ class CanvasMap extends React.Component {
 }
 
 CanvasMap.propTypes = {
+    onSaveRow: PropTypes.func.isRequired,
     spreadsheetData: propTypes.spreadsheetData.isRequired,
 };
 

@@ -4,6 +4,7 @@
 
 1. make contact status special
 8. canvassing
+  1. geocode people who haven't been
   2. don't hardcode center point
   3. support merging into a bubble
   4. households vs. people

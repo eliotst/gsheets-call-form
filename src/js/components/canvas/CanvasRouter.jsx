@@ -26,6 +26,7 @@ export default function CanvasRouter({
                 path="/map"
                 render={() => (
                     <CanvasMap
+                        onSaveRow={onSaveRow}
                         spreadsheetData={spreadsheetData}
                     />
                 )}

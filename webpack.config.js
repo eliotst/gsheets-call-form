@@ -67,6 +67,7 @@ module.exports = (env = {}) => ({
             DEFAULT_SPREADSHEET_ID: JSON.stringify(envConfig.parsed.DEFAULT_SPREADSHEET_ID),
             OAUTH_CLIENT_ID: JSON.stringify(envConfig.parsed.OAUTH_CLIENT_ID),
             GOOGLE_MAPS_API_KEY: JSON.stringify(envConfig.parsed.GOOGLE_MAPS_API_KEY),
+            MAPQUEST_API_KEY: JSON.stringify(envConfig.parsed.MAPQUEST_API_KEY),
         }),
         new CleanWebpackPlugin(["dist/*"]),
         new CopyWebpackPlugin([
