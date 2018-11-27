@@ -13,7 +13,7 @@ export default function Page({
     user,
 }) {
     return (
-        <div>
+        <div className="container-fluid">
             <Nav
                 onUserChange={onUserChange}
                 user={user}

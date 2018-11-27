@@ -40,8 +40,8 @@ class CanvasMap extends React.Component {
         if (navigator && navigator.geolocation) {
             this.getCurrentLocation();
             setInterval(this.getCurrentLocation, 5000);
-            this.geoCodeEveryone();
         }
+        this.geoCodeEveryone();
     }
 
     componentWillUnmount() {
@@ -79,7 +79,7 @@ class CanvasMap extends React.Component {
     geoCode(person, rowNumber) {
         const { onSaveRow } = this.props;
         const addressString = `${person["Address *"]}, ${person["ZIP *"]}`;
-        return axios.get(`https://maps.googleapis.com/maps/api/geocode/json?key=${GOOGLE_MAPS_API_KEY}&address=${addressString}`)
+        return axios.get(`https://maps.googleapis.com/maps/api/geocode/json?key=${GOOGLE_GEOCODING_API_KEY}&address=${addressString}`)
             .then((response) => {
                 const firstResult = response.data.results[0];
                 const latLong = firstResult.geometry.location;

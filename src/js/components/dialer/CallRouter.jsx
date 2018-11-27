@@ -14,7 +14,7 @@ function CallRouter({
     const selectPerson = rowNumber => history.push(`/call/form/${rowNumber}`);
     const stop = () => history.push("/call");
     return (
-        <div>
+        <div className="call-router">
             <Route
                 exact
                 path="/call"

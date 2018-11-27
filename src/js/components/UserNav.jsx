@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 import React from "react";
+import "bootstrap/js/dist/dropdown";
 
 import propTypes from "./propTypes";
 
@@ -9,14 +10,22 @@ export default function UserNav({ onUserChange, user }) {
         onUserChange(null);
     };
     return (
-        <ul id="nav-mobile" className="right hide-on-med-and-down">
-            <li>
+        <li className="nav-item dropdown user-nav">
+            <a
+                className="nav-link dropdown-toggle"
+                id="navbarDropdown"
+                href="#"
+                role="button"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+            >
                 Hello, {user.name}!
-            </li>
-            <li>
-                <a onClick={logOut}>Log Out</a>
-            </li>
-        </ul>
+            </a>
+            <div className="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a className="dropdown-item" onClick={logOut}>Log Out</a>
+            </div>
+        </li>
     );
 }
 

@@ -2,12 +2,17 @@
 
 ## Short Term
 
+11. styling
+  1. replace with bootstrap
+  2. map icons
+    1. visited house
+    2. current location
 1. make contact status special
 8. canvassing
-  1. geocode people who haven't been
-  2. don't hardcode center point
-  3. support merging into a bubble
-  4. households vs. people
+  2. look up district for person
+  3. don't hardcode center point
+  4. support merging into a bubble
+  5. households vs. people
 9. turf tracker
   1. create new spreadsheet
   2. assign person to spreadsheet
@@ -16,11 +21,6 @@
   5. assign form to person
 10. config-driven forms
   1. create config from another worksheet
-11. styling
-  1. replace with bootstrap
-  2. map icons
-    1. visited house
-    2. current location
 12. no default spreadsheet
   1. embed into URL
   2. ask if none provided

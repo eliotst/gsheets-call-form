@@ -177,8 +177,8 @@ export default class SpreadsheetContainer extends React.Component {
                     path="/"
                     render={() => (
                         <div className="form-buttons">
-                            <a className="btn" href="#/call">Call</a>
-                            <a className="btn" href="#/map">Canvas</a>
+                            <a className="btn btn-primary" href="#/call">Call</a>
+                            <a className="btn btn-primary" href="#/map">Canvas</a>
                         </div>
                     )}
                 />
