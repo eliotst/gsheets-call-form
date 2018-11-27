@@ -7,7 +7,7 @@ import CanvasMap from "../canvas/CanvasMap";
 import propTypes from "../propTypes";
 
 export default function CanvasRouter({
-    onSaveRow, spreadsheetData,
+    onSaveRow, spreadsheetData, user,
 }) {
     return (
         <div>
@@ -18,6 +18,7 @@ export default function CanvasRouter({
                         onSaveRow={onSaveRow}
                         spreadsheetData={spreadsheetData}
                         personRow={parseInt(routeProps.match.params.personId, 10)}
+                        user={user}
                     />
                 )}
             />
@@ -38,4 +39,5 @@ export default function CanvasRouter({
 CanvasRouter.propTypes = {
     onSaveRow: PropTypes.func.isRequired,
     spreadsheetData: propTypes.csvData.isRequired,
+    user: propTypes.user.isRequired,
 };

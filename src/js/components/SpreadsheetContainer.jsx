@@ -169,6 +169,7 @@ export default class SpreadsheetContainer extends React.Component {
                             onResetSpreadsheet={this.getSpreadsheetData}
                             onSaveRow={this.saveRow}
                             spreadsheetData={spreadsheetData}
+                            user={user}
                         />
                     )}
                 />

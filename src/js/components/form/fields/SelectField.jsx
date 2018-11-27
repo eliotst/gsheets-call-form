@@ -12,9 +12,10 @@ export default function SelectField({ formFieldConfig, onFieldChange, value }) {
         <option key={option} value={option}>{option}</option>);
     options.splice(0, 0, <option key="" value="">Select ...</option>);
     return (
-        <div className="input-field col s12">
-            <div className="label">{formFieldConfig.displayName}</div>
+        <div className="form-group">
+            <label htmlFor={fieldId}>{formFieldConfig.displayName}</label>
             <select
+                className="form-control"
                 id={fieldId}
                 onChange={onChange}
                 value={value}

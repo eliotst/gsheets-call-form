@@ -87,8 +87,12 @@ export default class PersonContainer extends React.Component {
         const errorElements = validationErrors.map(message =>
             <div className="message">{message}</div>);
         return (
-            <div>
-                <FormHeader formConfig={formConfig} personData={personData} />
+            <div className="person-form container">
+                <FormHeader
+                    formConfig={formConfig}
+                    onFieldChange={this.onFieldChange}
+                    personData={personData}
+                />
                 <FormFieldGroup
                     formConfig={formConfig}
                     onFieldChange={this.onFieldChange}

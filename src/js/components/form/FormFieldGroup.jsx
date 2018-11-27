@@ -13,7 +13,6 @@ const buildQuestion = (formFieldConfig, onFieldChange, personData) => {
         return (
             <SelectField
                 formFieldConfig={formFieldConfig}
-                key={formFieldConfig.name}
                 onFieldChange={onFieldChange}
                 value={value}
             />);
@@ -21,7 +20,6 @@ const buildQuestion = (formFieldConfig, onFieldChange, personData) => {
         return (
             <TextField
                 formFieldConfig={formFieldConfig}
-                key={formFieldConfig.name}
                 onFieldChange={onFieldChange}
                 value={value}
             />);
@@ -32,10 +30,12 @@ const buildQuestion = (formFieldConfig, onFieldChange, personData) => {
 
 export default function FormFieldGroup({ formConfig, onFieldChange, personData }) {
     const formFields = formConfig.filter(config => config.type !== "readonly");
-    const questions = formFields.map(formFieldConfig =>
-        buildQuestion(formFieldConfig, onFieldChange, personData));
+    const questions = formFields.map(formFieldConfig => (
+        <div key={formFieldConfig.name} className="col-12">
+            {buildQuestion(formFieldConfig, onFieldChange, personData)}
+        </div>));
     return (
-        <div className="row form-question-group">
+        <div className="row form-field-group">
             {questions}
         </div>
     );

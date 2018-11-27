@@ -13,12 +13,12 @@ export default function Page({
     user,
 }) {
     return (
-        <div className="container-fluid">
+        <div className="page container-fluid">
             <Nav
                 onUserChange={onUserChange}
                 user={user}
             />
-            <div className="container page">
+            <div>
                 <LoginContainer
                     isLoggedIn={isLoggedIn}
                     onLoginStateChange={onLoginStateChange}

@@ -6,9 +6,8 @@ export default function ReadOnlyField({
     value,
 }) {
     return (
-        <div className="col s12 m6 display-field">
+        <div className="read-only-field">
             <label>{displayName}</label>
-            <div className="value">{value}</div>
         </div>
     );
 }

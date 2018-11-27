@@ -3,12 +3,13 @@
 ## Short Term
 
 11. styling
-  1. replace with bootstrap
   2. map icons
     1. visited house
     2. current location
+    3. district summary
 1. make contact status special
 8. canvassing
+  1. add new person
   2. look up district for person
   3. don't hardcode center point
   4. support merging into a bubble

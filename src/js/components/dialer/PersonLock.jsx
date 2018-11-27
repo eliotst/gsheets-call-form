@@ -4,7 +4,7 @@ import React from "react";
 import PersonFormConfig from "../form/PersonFormConfig";
 import propTypes from "../propTypes";
 
-export default class PersonPicker extends React.Component {
+export default class PersonLock extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -39,7 +39,7 @@ export default class PersonPicker extends React.Component {
 
     lockPerson() {
         const {
-            onSaveRow, personRow, spreadsheetData, stop, user,
+            onSaveRow, personRow, spreadsheetData, user,
         } = this.props;
         const caller = user.id;
         const lockValue = Math.ceil(Math.random() * 1000000);
@@ -61,7 +61,9 @@ export default class PersonPicker extends React.Component {
                     lockValue,
                 });
             } else {
-                stop();
+                return this.setState({
+                    error: "Something happened.",
+                });
             }
         });
     }
@@ -113,7 +115,7 @@ export default class PersonPicker extends React.Component {
     }
 }
 
-PersonPicker.propTypes = {
+PersonLock.propTypes = {
     onSaveRow: PropTypes.func.isRequired,
     personRow: PropTypes.number.isRequired,
     spreadsheetData: propTypes.csvData.isRequired,
