@@ -101,7 +101,7 @@ export default class PersonContainer extends React.Component {
                 <div className="errors">{errorElements}</div>
                 <div className="form-buttons">
                     <button className="btn" onClick={releasePerson}>Cancel</button>
-                    <button className="btn" onClick={this.onSave}>Save</button>
+                    <button className="btn btn-primary" onClick={this.onSave}>Save</button>
                 </div>
             </div>
         );

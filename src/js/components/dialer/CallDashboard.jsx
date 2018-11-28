@@ -4,7 +4,7 @@ import React from "react";
 import propTypes from "../propTypes";
 
 export default function CallDashboard({ pick, spreadsheetData, user }) {
-    const called = spreadsheetData.values.filter(row => row["Call Lock #"]);
+    const called = spreadsheetData.values.filter(row => row["Call Lock #"] || row["Contact Status [No Answer, Contacted, Bad Number, Do Not Call, Left a Voicemail] !"]);
     const calledByUser = called.filter(row => row["Caller *"] === user.id);
     const numberOfPeople = spreadsheetData.values.length;
     return (

@@ -28,8 +28,10 @@ export default class PersonPicker extends React.Component {
         } = this.props;
         spreadsheetData.values.forEach((row, index) => {
             const lockValue = row["Call Lock #"];
+            const contactStatus = row["Contact Status [No Answer, Contacted, Bad Number, Do Not Call, Left a Voicemail] !"];
             const phoneNumber = row["Phone Number *"];
             if ((lockValue === undefined || lockValue === "") &&
+                (contactStatus === undefined || contactStatus === "") &&
                 phoneNumber !== undefined && phoneNumber.match(/\d/)) {
                 possibleRows.push(index);
             }

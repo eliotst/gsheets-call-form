@@ -150,7 +150,7 @@ export default class SpreadsheetContainer extends React.Component {
             return <div>Loading ...</div>;
         }
         return (
-            <div>
+            <div className="spreadsheet-container">
                 <Route
                     path="/call"
                     render={() => (
@@ -177,9 +177,9 @@ export default class SpreadsheetContainer extends React.Component {
                     exact
                     path="/"
                     render={() => (
-                        <div className="form-buttons">
-                            <a className="btn btn-primary" href="#/call">Call</a>
-                            <a className="btn btn-primary" href="#/map">Canvas</a>
+                        <div className="form-buttons module-picker">
+                            <a className="btn btn-lg btn-primary" href="#/call">Call</a>
+                            <a className="btn btn-lg btn-primary" href="#/map">Canvas</a>
                         </div>
                     )}
                 />

@@ -22,13 +22,13 @@ export default class PersonLock extends React.Component {
     }
 
     componentWillUnmount() {
-        this.releasePerson();
+        this.releasePerson(false);
     }
 
     onSaveRow(rowData) {
-        const { onSaveRow } = this.props;
+        const { onSaveRow, personRow } = this.props;
         const {
-            callDate, caller, lockValue, personRow,
+            callDate, caller, lockValue,
         } = this.state;
         const row = Object.assign({}, rowData);
         row["Call Lock #"] = lockValue.toString();
@@ -69,11 +69,11 @@ export default class PersonLock extends React.Component {
     }
 
     releasePerson() {
-        const { onSaveRow, personRow, spreadsheetData, stop } = this.props;
+        const {
+            onSaveRow, personRow, spreadsheetData, stop,
+        } = this.props;
         const rowData = spreadsheetData.values[personRow];
         rowData["Call Lock #"] = "";
-        rowData["Caller *"] = "";
-        rowData["Contact Date *"] = "";
         onSaveRow(personRow, rowData).then(() => {
             stop();
         }).catch((reason) => {
@@ -90,12 +90,12 @@ export default class PersonLock extends React.Component {
         const { error } = this.state;
         if (error !== null) {
             return (
-                <div>
-                    <div>
+                <div className="person-lock">
+                    <div className="error">
                         {error}
                     </div>
                     <div>
-                        <button className="btn" onClick={stop}>Cancel</button>
+                        <button className="btn" onClick={stop}>Go Back</button>
                     </div>
                 </div>
             );
