@@ -3,6 +3,7 @@ const CopyWebpackPlugin = require("copy-webpack-plugin");
 const dotenv = require("dotenv");
 const path = require("path");
 const webpack = require("webpack");
+const WorkboxPlugin = require("workbox-webpack-plugin");
 
 const envConfig = dotenv.config();
 
@@ -65,7 +66,7 @@ module.exports = (env = {}) => ({
     plugins: [
         new webpack.DefinePlugin({
             DEFAULT_SPREADSHEET_ID: JSON.stringify(envConfig.parsed.DEFAULT_SPREADSHEET_ID),
-            OAUTH_CLIENT_ID: JSON.stringify(envConfig.parsed.OAUTH_CLIENT_ID),
+            OAUTH_CLIENT_ID: env.OAUTH_CLIENT_ID ? JSON.stringify(env.OAUTH_CLIENT_ID) : JSON.stringify(envConfig.parsed.OAUTH_CLIENT_ID),
             GOOGLE_MAPS_API_KEY: JSON.stringify(envConfig.parsed.GOOGLE_MAPS_API_KEY),
             GOOGLE_GEOCODING_API_KEY: JSON.stringify(envConfig.parsed.GOOGLE_GEOCODING_API_KEY),
             MAPQUEST_API_KEY: JSON.stringify(envConfig.parsed.MAPQUEST_API_KEY),
@@ -74,6 +75,10 @@ module.exports = (env = {}) => ({
         new CopyWebpackPlugin([
             { from: "src/static/" },
         ]),
+        new WorkboxPlugin.InjectManifest({
+            swSrc: "./src/js/sw.js",
+            swDest: "service-worker.js",
+        }),
     ],
     resolve: {
         extensions: [".js", ".json", ".jsx"],

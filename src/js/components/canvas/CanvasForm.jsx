@@ -10,16 +10,32 @@ function CanvasForm({
     history, onSaveRow, spreadsheetData, personRow, user,
 }) {
     const stop = () => history.push("/map");
-    const releasePerson = () => stop();
+    if (personRow === null) {
+        return (
+            <PersonFormConfig
+                onSaveRow={onSaveRow}
+                releasePerson={stop}
+                spreadsheetData={spreadsheetData}
+                stop={stop}
+                personRow={null}
+            />
+        );
+    }
     return (
         <PersonLock
             onSaveRow={onSaveRow}
-            releasePerson={releasePerson}
             spreadsheetData={spreadsheetData}
             stop={stop}
             personRow={personRow}
             user={user}
-        />
+        >
+            <PersonFormConfig
+                onSaveRow={onSaveRow}
+                spreadsheetData={spreadsheetData}
+                stop={stop}
+                personRow={personRow}
+            />
+        </PersonLock>
     );
 }
 

@@ -1,6 +1,5 @@
 import PropTypes from "prop-types";
 import React from "react";
-import "bootstrap/js/dist/dropdown";
 
 import propTypes from "./propTypes";
 

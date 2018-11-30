@@ -1,20 +1,15 @@
 import PropTypes from "prop-types";
 import React from "react";
 
-import PersonFormConfig from "../form/PersonFormConfig";
 import propTypes from "../propTypes";
 
 export default class PersonLock extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            callDate: null,
-            caller: null,
             error: null,
-            lockValue: null,
         };
         this.releasePerson = this.releasePerson.bind(this);
-        this.onSaveRow = this.onSaveRow.bind(this);
     }
 
     componentDidMount() {
@@ -23,18 +18,6 @@ export default class PersonLock extends React.Component {
 
     componentWillUnmount() {
         this.releasePerson(false);
-    }
-
-    onSaveRow(rowData) {
-        const { onSaveRow, personRow } = this.props;
-        const {
-            callDate, caller, lockValue,
-        } = this.state;
-        const row = Object.assign({}, rowData);
-        row["Call Lock #"] = lockValue.toString();
-        row["Caller *"] = caller;
-        row["Contact Date *"] = callDate;
-        return onSaveRow(personRow, row);
     }
 
     lockPerson() {
@@ -54,13 +37,7 @@ export default class PersonLock extends React.Component {
         rowData["Contact Date *"] = new Date().toISOString();
         return onSaveRow(personRow, rowData).then((response) => {
             const { values } = response.spreadsheetData;
-            if (values[personRow]["Call Lock #"] === lockValue.toString()) {
-                this.setState({
-                    callDate: new Date(),
-                    caller,
-                    lockValue,
-                });
-            } else {
+            if (values[personRow]["Call Lock #"] !== lockValue.toString()) {
                 return this.setState({
                     error: "Something happened.",
                 });
@@ -85,7 +62,7 @@ export default class PersonLock extends React.Component {
 
     render() {
         const {
-            personRow, spreadsheetData, stop,
+            personRow, stop,
         } = this.props;
         const { error } = this.state;
         if (error !== null) {
@@ -103,19 +80,17 @@ export default class PersonLock extends React.Component {
         if (personRow === null) {
             return <div>Loading ...</div>;
         }
+        const newProps = { releasePerson: this.releasePerson, ...this.props };
         return (
-            <PersonFormConfig
-                onSaveRow={this.onSaveRow}
-                releasePerson={this.releasePerson}
-                spreadsheetData={spreadsheetData}
-                stop={stop}
-                personRow={personRow}
-            />
+            <div>
+                {React.cloneElement(this.props.children, newProps)}
+            </div>
         );
     }
 }
 
 PersonLock.propTypes = {
+    children: PropTypes.element.isRequired,
     onSaveRow: PropTypes.func.isRequired,
     personRow: PropTypes.number.isRequired,
     spreadsheetData: propTypes.csvData.isRequired,

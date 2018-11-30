@@ -16,7 +16,7 @@ function determineIcon(google, person) {
     const iconUrl = `http://maps.google.com/mapfiles/ms/icons/${color}.png`;
     return {
         anchor: new google.maps.Point(32, 32),
-        scaledSize: new google.maps.Size(32, 32),
+        scaledSize: new google.maps.Size(48, 48),
         url: iconUrl,
     };
 }
@@ -111,7 +111,7 @@ class CanvasMap extends React.Component {
     }
 
     render() {
-        const { google, spreadsheetData } = this.props;
+        const { addPerson, google, spreadsheetData } = this.props;
         const { activeMarker, activePersonIndex, currentLocation } = this.state;
         const { values } = spreadsheetData;
         const center = {
@@ -143,6 +143,10 @@ class CanvasMap extends React.Component {
                 position={currentLocation}
             />);
         }
+        const clickButton = (evt) => {
+            evt.preventDefault();
+            addPerson();
+        };
         return (
             <div className="canvas-map">
                 <Map
@@ -165,12 +169,14 @@ class CanvasMap extends React.Component {
                             </a> : <span />}
                     </InfoWindow>
                 </Map>
+                <button className="btn btn-primary add-person" onClick={clickButton}>Add Person</button>
             </div>
         );
     }
 }
 
 CanvasMap.propTypes = {
+    addPerson: PropTypes.func.isRequired,
     onSaveRow: PropTypes.func.isRequired,
     spreadsheetData: propTypes.spreadsheetData.isRequired,
 };

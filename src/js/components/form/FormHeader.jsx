@@ -4,14 +4,15 @@ import React from "react";
 import TextField from "./fields/TextField";
 import propTypes from "../propTypes";
 
-export default function FormHeader({ formConfig, newPerson, onFieldChange, personData }) {
+export default function FormHeader({
+    formConfig, newPerson, onFieldChange, personData,
+}) {
     const headerConfigs = formConfig.filter(config => config.type === "readonly");
     const headerFields = headerConfigs.map(config =>
         (
-            <div className="col-lg-6 col-sm-12">
+            <div key={config.name} className="col-lg-6 col-sm-12">
                 <TextField
                     formFieldConfig={config}
-                    key={config.name}
                     onFieldChange={onFieldChange}
                     readonly={!newPerson}
                     value={personData[config.name]}

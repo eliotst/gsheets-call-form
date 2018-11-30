@@ -1,17 +1,31 @@
 import PropTypes from "prop-types";
 import React from "react";
-import { Route } from "react-router-dom";
+import { Route, withRouter } from "react-router-dom";
 
 import CanvasForm from "../canvas/CanvasForm";
 import CanvasMap from "../canvas/CanvasMap";
 import propTypes from "../propTypes";
 
-export default function CanvasRouter({
-    onSaveRow, spreadsheetData, user,
+function CanvasRouter({
+    history, onSaveRow, spreadsheetData, user,
 }) {
+    const newPerson = () => history.push("/map/person/new");
     return (
         <div>
             <Route
+                exact
+                path="/map/person/new" // TODO: properly nest
+                render={() => (
+                    <CanvasForm
+                        onSaveRow={onSaveRow}
+                        spreadsheetData={spreadsheetData}
+                        personRow={null}
+                        user={user}
+                    />
+                )}
+            />
+            <Route
+                exact
                 path="/map/:personId" // TODO: properly nest
                 render={routeProps => (
                     <CanvasForm
@@ -27,6 +41,7 @@ export default function CanvasRouter({
                 path="/map"
                 render={() => (
                     <CanvasMap
+                        addPerson={newPerson}
                         onSaveRow={onSaveRow}
                         spreadsheetData={spreadsheetData}
                     />
@@ -41,3 +56,5 @@ CanvasRouter.propTypes = {
     spreadsheetData: propTypes.csvData.isRequired,
     user: propTypes.user.isRequired,
 };
+
+export default withRouter(CanvasRouter);

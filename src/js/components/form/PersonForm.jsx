@@ -18,8 +18,9 @@ export default class PersonContainer extends React.Component {
         super(props);
         this.state = {
             error: null,
-            validationErrors: [],
+            newPerson: false,
             personData: null,
+            validationErrors: [],
         };
         this.onFieldChange = this.onFieldChange.bind(this);
         this.onSave = this.onSave.bind(this);
@@ -39,7 +40,7 @@ export default class PersonContainer extends React.Component {
     }
 
     onSave() {
-        const { onSaveRow, stop } = this.props;
+        const { onSaveRow, personRow, stop } = this.props;
         const { personData } = this.state;
         const row = personData;
         const validationErrors = validate(personData);
@@ -47,7 +48,7 @@ export default class PersonContainer extends React.Component {
             this.setState({ validationErrors });
             return Promise.resolve();
         }
-        return onSaveRow(row).then(() => {
+        return onSaveRow(personRow, row).then(() => {
             stop();
         }).catch((reason) => {
             if (reason.result !== undefined) {
@@ -60,15 +61,23 @@ export default class PersonContainer extends React.Component {
 
     buildPerson() {
         const { spreadsheetData, personRow } = this.props;
-        const personData = spreadsheetData.values[personRow];
+        let personData = spreadsheetData.values[personRow];
+        if (personData === undefined) {
+            personData = {};
+        }
         this.setState({
+            newPerson: true,
             personData,
         });
     }
 
     render() {
-        const { error, validationErrors, personData } = this.state;
-        const { formConfig, releasePerson, stop } = this.props;
+        const {
+            error, validationErrors, newPerson, personData,
+        } = this.state;
+        const {
+            formConfig, releasePerson, stop,
+        } = this.props;
         if (error !== null) {
             return (
                 <div>
@@ -90,6 +99,7 @@ export default class PersonContainer extends React.Component {
             <div className="person-form container">
                 <FormHeader
                     formConfig={formConfig}
+                    newPerson={newPerson}
                     onFieldChange={this.onFieldChange}
                     personData={personData}
                 />

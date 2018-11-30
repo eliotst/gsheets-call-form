@@ -116,16 +116,17 @@ export default class SpreadsheetContainer extends React.Component {
     saveRow(rowNumber, csvData) {
         const { parameters } = this.props;
         const { spreadsheetId } = parameters;
-        const { fieldRowIndexMap } = this.state;
+        const { fieldRowIndexMap, spreadsheetData } = this.state;
         const rowData = mapPersonDataToSpreadsheetRow(csvData, fieldRowIndexMap);
         const resource = {
             values: [
                 rowData,
             ],
         };
-        // TODO: don't hardcode I:S
         const rangeEnd = columnToLetter(rowData.length);
-        const range = `A${rowNumber + 2}:${rangeEnd}${rowNumber + 2}`;
+        const actualRowNumber = rowNumber === null ? spreadsheetData.values.length : rowNumber;
+        const range = `A${actualRowNumber + 2}:${rangeEnd}${actualRowNumber + 2}`;
+        // TODO: before saving new person, make sure we have latest data
         return new Promise((resolve) => {
             gapi.client.sheets.spreadsheets.values.update({
                 range,

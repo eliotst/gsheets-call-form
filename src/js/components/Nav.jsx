@@ -27,7 +27,7 @@ function Nav({ history, onUserChange, user }) {
             >
                 <span className="navbar-toggler-icon" />
             </button>
-            <div className="collapse navbar-collapse">
+            <div className="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul className="navbar-nav mr-auto">
                     <li className="nav-item">
                         <a href="#/map" className="nav-link" onClick={canvas}>

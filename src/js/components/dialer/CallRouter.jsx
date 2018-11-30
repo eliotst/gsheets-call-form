@@ -4,6 +4,7 @@ import { Route, withRouter } from "react-router-dom";
 
 import CallDashboard from "./CallDashboard";
 import propTypes from "../propTypes";
+import PersonFormConfig from "../form/PersonFormConfig";
 import PersonLock from "./PersonLock";
 import PersonPicker from "./PersonPicker";
 
@@ -11,7 +12,7 @@ function CallRouter({
     history, onSaveRow, spreadsheetData, user,
 }) {
     const pick = () => history.push("/call/pick");
-    const selectPerson = rowNumber => history.push(`/call/form/${rowNumber}`);
+    const selectPerson = rowNumber => history.replace(`/call/form/${rowNumber}`);
     const stop = () => history.push("/call");
     return (
         <div className="call-router">
@@ -49,7 +50,14 @@ function CallRouter({
                         stop={stop}
                         personRow={parseInt(routeProps.match.params.personId, 10)}
                         user={user}
-                    />
+                    >
+                        <PersonFormConfig
+                            onSaveRow={onSaveRow}
+                            spreadsheetData={spreadsheetData}
+                            stop={stop}
+                            personRow={parseInt(routeProps.match.params.personId, 10)}
+                        />
+                    </PersonLock>
                 )}
             />
         </div>

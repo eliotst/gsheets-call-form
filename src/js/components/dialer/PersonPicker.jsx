@@ -1,7 +1,6 @@
 import PropTypes from "prop-types";
 import React from "react";
 
-import PersonLock from "./PersonLock";
 import propTypes from "../propTypes";
 
 const pickRandom = (arr) => {

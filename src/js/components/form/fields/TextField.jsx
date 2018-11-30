@@ -4,25 +4,40 @@ import React from "react";
 
 import propTypes from "../../propTypes";
 
-export default function TextField({ formFieldConfig, onFieldChange, readonly, value }) {
+export default function TextField({
+    formFieldConfig, onFieldChange, readonly, value,
+}) {
     const onChange = (event) => {
         onFieldChange(formFieldConfig.name, event.target.value);
         Materialize.updateTextFields();
     };
     const fieldId = formFieldConfig.displayName.replace(" ", "-");
+    let control;
+    if (readonly) {
+        control = <div className="value">{value}</div>;
+    } else if (formFieldConfig.type === "readonly") {
+        control = (
+            <input
+                className="form-control"
+                id={fieldId}
+                onChange={onChange}
+                value={value}
+            />);
+    } else {
+        control = (
+            <textarea
+                className="form-control"
+                id={fieldId}
+                onChange={onChange}
+                value={value}
+            />);
+    }
     return (
         <div className="form-group">
             <label htmlFor={fieldId}>
                 {formFieldConfig.displayName}
             </label>
-            {readonly ?
-                <div className="value">{value}</div> :
-                <textarea
-                    className="form-control"
-                    id={fieldId}
-                    onChange={onChange}
-                    value={value}
-                />}
+            {control}
         </div>
     );
 }
